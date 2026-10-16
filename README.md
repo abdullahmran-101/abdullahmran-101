@@ -555,8 +555,8 @@ timeline
 
 | Role | Organisation | Period | Contribution |
 |---|---|---|---|
-| **Freelance AI/ML Engineer** | Self-employed, Remote | Feb 2026 to Present | End-to-end LLM applications, RAG pipelines, AI agents, backend APIs, automation |
-| **AI/ML Intern** | Safe X Solutions, Remote | Apr 2026 to Jul 2026 | Classification and regression models, feature engineering, predictive analytics |
+| **Associate AI/ML Engineer** | Self-employed, Remote | Oct 2026 to Present | End-to-end LLM applications, RAG pipelines, AI agents, backend APIs, automation |
+| **Junior Machine Learning Engineer** | Sunsprinkle, Remote | Dec 2025 to Oct 2026 | Developed Python-based ML models, optimized predictive analytics workflows, and integrated AI/ML solutions into backend applications. |
 | **AI/ML Fellow** | ACM UET x DevSinc | Jul 2024 to Feb 2025 | Healthcare predictive analytics with a **90% accuracy** body-fat prediction model; automated ML pipeline delivering **30% faster** processing |
 | **ML Core Team Member** | UMT GoDoc | Oct 2024 to Nov 2025 | Data preprocessing, predictive modelling, ML workflow implementation |
 
@@ -643,7 +643,7 @@ Intermediate of Computer Science, Aug 2019 to Apr 2021.
 
 | Channel | Details |
 |---|---|
-| **Email** | abdullahmran96@gmail.com |
+| **Email** | abdullahmran.001@gmail.com |
 | **Phone** | +92 316 400 9363 |
 | **LinkedIn** | [linkedin.com/in/abdullah-imran-211658230](https://www.linkedin.com/in/abdullah-imran-211658230) |
 | **GitHub** | [github.com/abdullahmran-101](https://github.com/abdullahmran-101) |
