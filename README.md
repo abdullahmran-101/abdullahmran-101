@@ -2,8 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=AI%20%2F%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" />
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3200&pause=1000&color=00FFD1&center=true&vCenter=true&width=1050&height=180&lines=%3E+ME+%3A+ABDULLAH+IMRAN+%7C+AI+ENGINEER;%3E+ENGINEERING+INTELLIGENCE+INTO+REAL-WORLD+SYSTEMS;%3E+LLMs+%7C+AGENTIC+AI+%7C+RAG+%7C+MULTIMODAL+SYSTEMS;%3E+MACHINE+LEARNING+%7C+COMPUTER+VISION+%7C+XAI;%3E+FROM+RAW+DATA+TO+DEPLOYABLE+INTELLIGENCE;%3E+BUILD.+EVALUATE.+OPTIMIZE.+DEPLOY." alt="Abdullah Imran | AI Engineer" />
-
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=19&duration=2600&pause=900&color=00FFD1&center=true&vCenter=true&width=900&lines=%3E+whoami+%3A+Abdullah+Imran%2C+AI%2FML+Engineer;%3E+stack+--focus+%3A+GenAI+%7C+Agents+%7C+Multimodal+%7C+RAG;%3E+ship+--target+production+--no-notebook-demos;%3E+status+%3A+open+to+roles+and+contracts" alt="Typing SVG" />
 
 <br/>
 
@@ -17,12 +16,12 @@
 <br/><br/>
 
 <a href="https://www.linkedin.com/in/abdullah-imran-211658230"><img src="https://img.shields.io/badge/LinkedIn-Abdullah_Imran-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-<a href="mailto:abdullahmran.001@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran96@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
-<a href="https://github.com/abdullahmran-101"><img src="https://img.shields.io/badge/GitHub-MirAb--77-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+<a href="mailto:abdullahmran96@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran96@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
+<a href="https://github.com/abdullahmran-101"><img src="https://img.shields.io/badge/GitHub-abdullahmran--101-181717?style=for-the-badge&logo=github&logoColor=white"></a>
 
 <br/><br/>
 
-<img src="https://komarev.com/ghpvc/?username=MirAb-77&label=PROFILE+VIEWS&style=flat-square&color=00FFD1&labelColor=020B18" />
+<img src="https://komarev.com/ghpvc/?username=abdullahmran-101&label=PROFILE+VIEWS&style=flat-square&color=00FFD1&labelColor=020B18" />
 <img src="https://img.shields.io/badge/GPA-3.76_%2F_4.00-020B18?style=flat-square&labelColor=0A3D62" />
 <img src="https://img.shields.io/badge/Dean's_Merit_Award-x4-020B18?style=flat-square&labelColor=0A3D62" />
 <img src="https://img.shields.io/badge/Status-Open_to_Roles_%26_Contracts-00FFD1?style=flat-square&labelColor=020B18" />
@@ -200,8 +199,8 @@ mindmap
 
 <div align="center">
 
-<img height="165" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=MirAb-77&theme=tokyonight" />
-<img height="165" src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=MirAb-77&theme=tokyonight" />
+<img height="165" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=abdullahmran-101&theme=tokyonight" />
+<img height="165" src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=abdullahmran-101&theme=tokyonight" />
 
 </div>
 
@@ -317,7 +316,7 @@ flowchart LR
 | `ASSESS` | Further questioning before committing to an action |
 
 **Stack:** PyTorch, FER, KeypointRCNN, RoBERTa, FAISS, BGE embeddings, cross-encoder reranking, Groq LLaMA 3.3 70B, Groq Whisper, gTTS, Twilio, Google Maps API, FastAPI, Docker.
-**Repository:** [Heal-Matrix-AI](https://github.com/MirAb-77/Heal-Matrix-AI)
+**Repository:** [Heal-Matrix-AI](https://github.com/abdullahmran-101/Heal-Matrix-AI)
 
 ---
 
@@ -335,7 +334,7 @@ flowchart LR
 ```
 
 Combines object detection with pose and gaze estimation to produce a continuously updated risk score per candidate.
-**Repository:** [Cheatify-AI-Proctoring-System](https://github.com/MirAb-77/Cheatify-AI-Proctoring-System)
+**Repository:** [Cheatify-AI-Proctoring-System](https://github.com/abdullahmran-101/Cheatify-AI-Proctoring-System)
 
 ---
 
@@ -358,7 +357,7 @@ flowchart TD
 ```
 
 **Stack:** SearXNG, ChromaDB, Celery, Redis, Django, Docker.
-**Repository:** [Research-Forge-AI](https://github.com/MirAb-77/Research-Forge-AI)
+**Repository:** [Research-Forge-AI](https://github.com/abdullahmran-101/Research-Forge-AI)
 
 ---
 
@@ -387,7 +386,7 @@ sequenceDiagram
 ```
 
 Key capabilities: ReAct reasoning loop, persistent memory, provider routing with failover, document RAG without an external vector database, and a usage analytics dashboard.
-**Repository:** [Agentflow-AI](https://github.com/MirAb-77/Agentflow-AI)
+**Repository:** [Agentflow-AI](https://github.com/abdullahmran-101/Agentflow-AI)
 
 ---
 
@@ -605,24 +604,24 @@ Intermediate of Computer Science, Aug 2019 to Apr 2021.
 
 <div align="center">
 
-<img height="190" src="https://github-readme-stats.vercel.app/api/?username=MirAb-77&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" />
-<img height="190" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MirAb-77&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" />
+<img height="190" src="https://github-readme-stats.vercel.app/api/?username=abdullahmran-101&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" />
+<img height="190" src="https://github-readme-stats.vercel.app/api/top-langs/?username=abdullahmran-101&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" />
 
 <br/>
 
-<img src="https://streak-stats.demolab.com/?user=MirAb-77&theme=tokyonight&hide_border=true" />
+<img src="https://streak-stats.demolab.com/?user=abdullahmran-101&theme=tokyonight&hide_border=true" />
 
 <br/>
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=MirAb-77&theme=react-dark&hide_border=true&area=true&color=00FFD1&line=00FFD1&point_color=ffffff" width="100%" />
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=abdullahmran-101&theme=react-dark&hide_border=true&area=true&color=00FFD1&line=00FFD1&point_color=ffffff" width="100%" />
 
 <br/>
 
-<img src="https://github-profile-trophy.vercel.app/?username=MirAb-77&theme=onedark&row=1&margin-w=15&no-frame=true" />
+<img src="https://github-profile-trophy.vercel.app/?username=abdullahmran-101&theme=onedark&row=1&margin-w=15&no-frame=true" />
 
 <br/>
 
-<img src="https://github-readme-stats.vercel.app/api/wakatime?username=MirAb-77&theme=tokyonight&hide_border=true&layout=compact" />
+<img src="https://github-readme-stats.vercel.app/api/wakatime?username=abdullahmran-101&theme=tokyonight&hide_border=true&layout=compact" />
 
 </div>
 
@@ -646,7 +645,7 @@ Intermediate of Computer Science, Aug 2019 to Apr 2021.
 | **Email** | abdullahmran96@gmail.com |
 | **Phone** | +92 316 400 9363 |
 | **LinkedIn** | [linkedin.com/in/abdullah-imran-211658230](https://www.linkedin.com/in/abdullah-imran-211658230) |
-| **GitHub** | [github.com/MirAb-77](https://github.com/MirAb-77) |
+| **GitHub** | [github.com/abdullahmran-101](https://github.com/abdullahmran-101) |
 | **Location** | Lahore, Pakistan (open to remote) |
 
 <br/>
