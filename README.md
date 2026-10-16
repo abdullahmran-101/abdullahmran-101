@@ -94,10 +94,10 @@ Expand any panel.
 |---|---|
 | **Name** | Abdullah Imran |
 | **Role** | AI/ML Engineer (Freelance, Remote) |
-| **Specialisation** | Generative AI, Agentic AI, Backend and Intelligent Systems |
+| **Specialisation** | Machine Learning , Computer vision , Generative AI, Agentic AI, Backend and Intelligent Systems |
 | **Education** | B.S. Data Science, UMT Lahore, 2022 to 2026 (GPA 3.76 / 4.00, Dean's Merit Award x4) |
-| **Core domains** | LLM applications, RAG, multimodal fusion, computer vision, workflow automation, MLOps, IoT |
-| **Base** | Lahore, Pakistan (remote-first) |
+| **Core domains** | Full- Stack , LLM applications, RAG, Multimodal fusion, Computer vision, Predictive Analysis MLOps |
+| **Base** | Lahore, Pakistan |
 
 </details>
 
@@ -125,8 +125,8 @@ I design, build and deploy **end-to-end intelligent systems**: the model, the re
 class AbdullahImran:
     role      = "AI/ML Engineer"
     paradigms = ["agentic", "multimodal", "retrieval-grounded"]
-    languages = ["Python", "SQL", "JavaScript"]
-    ships     = ["FastAPI services", "Dockerised pipelines", "n8n automations"]
+    languages = ["Python", "SQL", "JavaScript", "Nodejs", "Nextjs"]
+    ships     = ["FastAPI services", "Dockerised pipelines", "Django based systems", "Classical Ml Predictive systms"]
     principle = "Grounded outputs. Observable agents. Deployable by default."
 
     def solve(self, problem):
