@@ -2,7 +2,8 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=AI%20%2F%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" />
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=19&duration=2600&pause=900&color=00FFD1&center=true&vCenter=true&width=900&lines=%3E+whoami+%3A+Abdullah+Imran%2C+AI%2FML+Engineer;%3E+stack+--focus+%3A+GenAI+%7C+Agents+%7C+Multimodal+%7C+RAG;%3E+ship+--target+production+--no-notebook-demos;%3E+status+%3A+open+to+roles+and+contracts" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3200&pause=1000&color=00FFD1&center=true&vCenter=true&width=1050&height=180&lines=%3E+ME+%3A+ABDULLAH+IMRAN+%7C+AI+ENGINEER;%3E+ENGINEERING+INTELLIGENCE+INTO+REAL-WORLD+SYSTEMS;%3E+LLMs+%7C+AGENTIC+AI+%7C+RAG+%7C+MULTIMODAL+SYSTEMS;%3E+MACHINE+LEARNING+%7C+COMPUTER+VISION+%7C+XAI;%3E+FROM+RAW+DATA+TO+DEPLOYABLE+INTELLIGENCE;%3E+BUILD.+EVALUATE.+OPTIMIZE.+DEPLOY." alt="Abdullah Imran | AI Engineer" />
+
 
 <br/>
 
