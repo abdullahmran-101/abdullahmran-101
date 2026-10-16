@@ -17,7 +17,7 @@
 <br/><br/>
 
 <a href="https://www.linkedin.com/in/abdullah-imran-211658230"><img src="https://img.shields.io/badge/LinkedIn-Abdullah_Imran-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-<a href="mailto:abdullahmran96@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran96@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
+<a href="mailto:abdullahmran.001@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran96@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
 <a href="https://github.com/abdullahmran-101"><img src="https://img.shields.io/badge/GitHub-abdullahmran--101-181717?style=for-the-badge&logo=github&logoColor=white"></a>
 
 <br/><br/>
