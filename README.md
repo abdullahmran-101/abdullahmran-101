@@ -4,6 +4,7 @@
 
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=19&duration=2600&pause=900&color=00FFD1&center=true&vCenter=true&width=900&lines=%3E+whoami+%3A+Abdullah+Imran%2C+AI%2FML+Engineer;%3E+stack+--focus+%3A+GenAI+%7C+Agents+%7C+Multimodal+%7C+RAG;%3E+ship+--target+production+--no-notebook-demos;%3E+status+%3A+open+to+roles+and+contracts" alt="Typing SVG" />
 
+
 <br/>
 
 <a href="#technical-skill-matrix"><img src="https://img.shields.io/badge/01-SKILLS-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
