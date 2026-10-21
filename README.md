@@ -43,7 +43,7 @@
 abdullah@lahore:~$ ./boot_profile.sh
 
 [  OK  ] Loading identity .............. Abdullah Imran, AI/ML Engineer
-[  OK  ] Mounting education ............ B.S. Data Science, UMT Lahore (GPA 3.76/4.00)
+[  OK  ] Mounting education ............ B.S. Data Science, UMT Lahore (GPA 3.74/4.00)
 [  OK  ] Starting perception modules ... vision | speech | text
 [  OK  ] Linking knowledge stores ...... FAISS | ChromaDB | SQLite | Postgres
 [  OK  ] Attaching reasoning engines ... LLaMA 3.3 70B | Gemini | GPT | Grok
