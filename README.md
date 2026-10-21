@@ -95,7 +95,7 @@ Expand any panel.
 | **Name** | Abdullah Imran |
 | **Role** | AI/ML Engineer (Freelance, Remote) |
 | **Specialisation** | Machine Learning , Computer vision , Generative AI, Agentic AI, Backend and Intelligent Systems |
-| **Education** | B.S. Data Science, UMT Lahore, 2022 to 2026 (GPA 3.76 / 4.00, Dean's Merit Award x4) |
+| **Education** | B.S. Data Science, UMT Lahore, 2022 to 2026 (GPA 3.74 / 4.00, Dean's Merit Award x3) |
 | **Core domains** | Full- Stack , LLM applications, RAG, Multimodal fusion, Computer vision, Predictive Analysis MLOps |
 | **Base** | Lahore, Pakistan |
 
@@ -543,11 +543,11 @@ timeline
     title Career and Education Timeline
     2019 - 2021 : Intermediate in Computer Science, GCU Lahore
     2022 : Begins B.S. Data Science, UMT Lahore
-    2024 : AI/ML Fellow, ACM UET x DevSinc
+    2024 : AI/ML Fellowship , ACM UET x DevSinc
          : ML Core Team, UMT GoDoc
-    2025 : Healthcare analytics and pipeline automation delivered
+    2025 : Assoicate ML Engineer Started  ( Jan 2025)
     2026 : B.S. Data Science completed
-         : AI/ML Intern, Safe X Solutions
+         : Associate Ml Engineer  Resigned (Oct 2026)
          : Freelance AI/ML Engineer
 ```
 
@@ -556,7 +556,7 @@ timeline
 | Role | Organisation | Period | Contribution |
 |---|---|---|---|
 | **Associate AI/ML Engineer** | Self-employed, Remote | Oct 2026 to Present | End-to-end LLM applications, RAG pipelines, AI agents, backend APIs, automation |
-| **Junior Machine Learning Engineer** | Sunsprinkle, Remote | Dec 2025 to Oct 2026 | Developed Python-based ML models, optimized predictive analytics workflows, and integrated AI/ML solutions into backend applications. |
+| **Junior Machine Learning Engineer** | Sunsprinkle, Remote | Dec 2024 to Oct 2026 | Developed Python-based ML models, optimized predictive analytics workflows, and integrated AI/ML solutions into backend applications. |
 | **AI/ML Fellow** | ACM UET x DevSinc | Jul 2024 to Feb 2025 | Healthcare predictive analytics with a **90% accuracy** body-fat prediction model; automated ML pipeline delivering **30% faster** processing |
 | **ML Core Team Member** | UMT GoDoc | Oct 2024 to Nov 2025 | Data preprocessing, predictive modelling, ML workflow implementation |
 
@@ -565,7 +565,7 @@ timeline
 ## Education and Certifications
 
 **University of Management and Technology (UMT), Lahore**
-B.S. in Data Science, Oct 2022 to Jun 2026. GPA **3.76 / 4.00**. Dean's Merit Award, four times.
+B.S. in Data Science, Oct 2022 to Jun 2026. GPA **3.74 / 4.00**. Dean's Merit Award, x3 times.
 
 **Government College University (GCU), Lahore**
 Intermediate of Computer Science, Aug 2019 to Apr 2021.
