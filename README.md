@@ -1,8 +1,6 @@
-
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=DATA%20SCIENTIST%20%26%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" alt="Abdullah Imran Header"/>
-
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=AI%20%2F%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" />
 <br/>
 
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3200&pause=1000&color=00FFD1&center=true&vCenter=true&width=1050&height=180&lines=DATA+SCIENTIST+%26+ML+ENGINEER;ENGINEERING+INTELLIGENCE+INTO+REAL-WORLD+SYSTEMS;LLMs+%7C+AGENTIC+AI+%7C+RAG+%7C+MULTIMODAL+AI;MACHINE+LEARNING+%7C+COMPUTER+VISION+%7C+XAI;FROM+RAW+DATA+TO+DEPLOYABLE+INTELLIGENCE;BUILD.+EVALUATE.+OPTIMIZE.+DEPLOY." alt="Data Scientist and ML Engineer"/>
