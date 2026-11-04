@@ -1,31 +1,56 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=DATA%20SCIENTIST%20%26%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" />
-
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3200&pause=1000&color=00FFD1&center=true&vCenter=true&width=1050&height=180&lines=%3E+ME+%3A+ABDULLAH+IMRAN+%7C+DATA+SCIENTIST+%26+ML+ENGINEER;%3E+ENGINEERING+INTELLIGENCE+INTO+REAL-WORLD+SYSTEMS;%3E+LLMs+%7C+AGENTIC+AI+%7C+RAG+%7C+MULTIMODAL+SYSTEMS;%3E+MACHINE+LEARNING+%7C+COMPUTER+VISION+%7C+XAI;%3E+FROM+RAW+DATA+TO+DEPLOYABLE+INTELLIGENCE;%3E+BUILD.+EVALUATE.+OPTIMIZE.+DEPLOY." alt="Abdullah Imran | Data Scientist & ML Engineer" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020B18,50:0A3D62,100:00FFD1&height=240&section=header&text=ABDULLAH%20IMRAN&fontSize=60&fontColor=ffffff&fontAlignY=36&desc=DATA%20SCIENTIST%20%26%20ML%20ENGINEER%20%7C%20LAHORE%2C%20PAKISTAN&descSize=18&descAlignY=58&animation=twinkling" width="100%" alt="Abdullah Imran Header"/>
 
 <br/>
 
-<a href="#technical-skill-matrix"><img src="https://img.shields.io/badge/01-SKILLS-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
-<a href="#flagship-systems-technical-deep-dives"><img src="https://img.shields.io/badge/02-SYSTEMS-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
-<a href="#complete-project-catalogue"><img src="https://img.shields.io/badge/03-PROJECTS-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
-<a href="#professional-timeline"><img src="https://img.shields.io/badge/04-EXPERIENCE-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
-<a href="#github-analytics"><img src="https://img.shields.io/badge/05-ANALYTICS-020B18?style=for-the-badge&labelColor=0A3D62" /></a>
-<a href="#contact"><img src="https://img.shields.io/badge/06-CONTACT-00FFD1?style=for-the-badge&labelColor=0A3D62" /></a>
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3200&pause=1000&color=00FFD1&center=true&vCenter=true&width=1050&height=180&lines=DATA+SCIENTIST+%26+ML+ENGINEER;ENGINEERING+INTELLIGENCE+INTO+REAL-WORLD+SYSTEMS;LLMs+%7C+AGENTIC+AI+%7C+RAG+%7C+MULTIMODAL+AI;MACHINE+LEARNING+%7C+COMPUTER+VISION+%7C+XAI;FROM+RAW+DATA+TO+DEPLOYABLE+INTELLIGENCE;BUILD.+EVALUATE.+OPTIMIZE.+DEPLOY." alt="Data Scientist and ML Engineer"/>
 
 <br/><br/>
 
-<a href="https://www.linkedin.com/in/abdullah-imran-211658230"><img src="https://img.shields.io/badge/LinkedIn-Abdullah_Imran-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-<a href="mailto:abdullahmran.001@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran.001@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
-<a href="https://github.com/abdullahmran-101"><img src="https://img.shields.io/badge/GitHub-abdullahmran--101-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+<a href="#technical-skill-matrix">
+<img src="https://img.shields.io/badge/01-SKILLS-020B18?style=for-the-badge&labelColor=0A3D62"/>
+</a>
+<a href="#flagship-systems-technical-deep-dives">
+<img src="https://img.shields.io/badge/02-SYSTEMS-020B18?style=for-the-badge&labelColor=0A3D62"/>
+</a>
+<a href="#complete-project-catalogue">
+<img src="https://img.shields.io/badge/03-PROJECTS-020B18?style=for-the-badge&labelColor=0A3D62"/>
+</a>
+<a href="#professional-timeline">
+<img src="https://img.shields.io/badge/04-EXPERIENCE-020B18?style=for-the-badge&labelColor=0A3D62"/>
+</a>
+<a href="#github-analytics">
+<img src="https://img.shields.io/badge/05-ANALYTICS-020B18?style=for-the-badge&labelColor=0A3D62"/>
+</a>
+<a href="#contact">
+<img src="https://img.shields.io/badge/06-CONTACT-00FFD1?style=for-the-badge&labelColor=0A3D62"/>
+</a>
 
 <br/><br/>
 
-<img src="https://komarev.com/ghpvc/?username=abdullahmran-101&label=PROFILE+VIEWS&style=flat-square&color=00FFD1&labelColor=020B18" />
-<img src="https://img.shields.io/badge/GPA-3.76_%2F_4.00-020B18?style=flat-square&labelColor=0A3D62" />
-<img src="https://img.shields.io/badge/Dean's_Merit_Award-x4-020B18?style=flat-square&labelColor=0A3D62" />
-<img src="https://img.shields.io/badge/Status-Open_to_Roles_%26_Contracts-00FFD1?style=flat-square&labelColor=020B18" />
+<a href="https://www.linkedin.com/in/abdullah-imran-211658230">
+<img src="https://img.shields.io/badge/LinkedIn-Abdullah_Imran-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>
+</a>
+
+<a href="mailto:abdullahmran.001@gmail.com">
+<img src="https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge&logo=gmail&logoColor=white"/>
+</a>
+
+<a href="https://github.com/abdullahmran-101">
+<img src="https://img.shields.io/badge/GitHub-Abdullah_Imran-181717?style=for-the-badge&logo=github&logoColor=white"/>
+</a>
+
+<br/><br/>
+
+<img src="https://komarev.com/ghpvc/?username=abdullahmran-101&label=PROFILE+VIEWS&style=flat-square&color=00FFD1&labelColor=020B18"/>
+
+<img src="https://img.shields.io/badge/GPA-3.76%20%2F%204.00-020B18?style=flat-square&labelColor=0A3D62"/>
+
+<img src="https://img.shields.io/badge/Dean's%20Merit%20Award-x4-020B18?style=flat-square&labelColor=0A3D62"/>
+
+<img src="https://img.shields.io/badge/Status-Open%20to%20Roles%20%26%20Contracts-00FFD1?style=flat-square&labelColor=020B18"/>
 
 </div>
 
