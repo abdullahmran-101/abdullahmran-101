@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" fill="none" role="img">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1C1C1C"/><stop offset="1" stop-color="#0A0A0A"/></linearGradient>
+<pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#1C1C1C"/></pattern>
+<linearGradient id="beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+</defs>
+<style>
+.pulse{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.rise{opacity:0;animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fade{opacity:0;animation:fade .8s ease forwards}
+@keyframes fade{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+
+.sq{animation:sq 2.8s ease-in-out infinite}
+@keyframes sq{0%,100%{opacity:.15}50%{opacity:1}}
+.sl{animation:sl 3s ease-in-out infinite}
+@keyframes sl{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}
+</style>
+<g transform="translate(6,6)"><rect width="388" height="288" rx="14" fill="#0A0A0A"/><rect width="388" height="288" rx="14" fill="url(#bg)" opacity=".7"/><rect width="388" height="288" rx="14" fill="url(#dots)"/><rect x=".5" y=".5" width="387" height="287" rx="14" stroke="#777777" stroke-opacity=".35"/><text x="28" y="42" font-size="13" font-weight="400" fill="#B3B3B3" text-anchor="start" letter-spacing="3" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace" >03 / EXPLORER</text><line x1="28" y1="58" x2="360" y2="58" stroke="#777777" stroke-opacity=".3"/><text class="rise" style="animation-delay:0.6000000000000001s" x="28" y="150" font-size="76" font-weight="800" fill="#FFFFFF" text-anchor="start" letter-spacing="0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" >3</text><text x="28" y="176" font-size="11" font-weight="400" fill="#777777" text-anchor="start" letter-spacing="2" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace" >ACTIVE BUILDS</text><text class="fade" style="animation-delay:1.2000000000000002s" x="28" y="214" font-size="14" font-weight="400" fill="#E5E5E5" text-anchor="start" letter-spacing="0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" >Agentic AI · multimodal fusion</text><text class="fade" style="animation-delay:1.4000000000000001s" x="28" y="236" font-size="14" font-weight="400" fill="#B3B3B3" text-anchor="start" letter-spacing="0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" >LLMs, retrieval, new tooling</text><text class="fade" style="animation-delay:1.6s" x="28" y="258" font-size="14" font-weight="400" fill="#B3B3B3" text-anchor="start" letter-spacing="0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" >Experiments and open source</text><circle cx="320" cy="110" r="14" stroke="#777777" stroke-opacity=".7"/><circle cx="320" cy="110" r="28" stroke="#777777" stroke-opacity=".7"/><circle cx="320" cy="110" r="42" stroke="#777777" stroke-opacity=".7"/><g><circle cx="362" cy="110" r="4" fill="#FFFFFF"/><animateTransform attributeName="transform" type="rotate" from="0 320 110" to="360 320 110" dur="9s" repeatCount="indefinite"/></g><circle cx="320" cy="110" r="2.5" fill="#FFFFFF"/></g><line x1="6" y1="156" x2="0" y2="156" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="1.5"/><circle class="pulse" cx="6" cy="156" r="3" fill="#FFFFFF"/>
+</svg>
