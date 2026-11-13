@@ -4,17 +4,44 @@
 Run locally:   python scripts/render_readme_cards.py
 Real contribution data: set GITHUB_TOKEN (the daily workflow does this).
 """
-import json, os, math, random, datetime as dt, urllib.request
+import json, os, sys, math, random, datetime as dt, urllib.request
 from pathlib import Path
 from xml.dom import minidom
 
 USER = "abdullahmran-101"
 OUT = Path(__file__).resolve().parent.parent / "cards"
 
-CY, VI, PK, AM, GR = "#22D3EE", "#8B5CF6", "#F472B6", "#FBBF24", "#34D399"
-BG0, BG2, LN = "#070A14", "#151C36", "#2A3558"
-TX, MU, DM = "#F1F5F9", "#94A3B8", "#64748B"
-ACC = [CY, VI, PK, AM, GR]
+THEMES = {
+    "pro": dict(BG0="#14161A", BG2="#1E2228", LN="#323841", TX="#F1E8D6", MU="#B3ADA0", DM="#7B7971",
+                N=("#5E8FD0", "#B24A5C", "#6FB08C", "#D8C3A0", "#F1E8D6", "#A3ABB5"),
+                HEAT=["#1B2220", "#26412F", "#33704D", "#5CA67F", "#A8D8BC"]),
+    "ember": dict(BG0="#0F0A10", BG2="#1D1420", LN="#35253A", TX="#FFF3EA", MU="#C9AFA6", DM="#8A7480",
+                  A=["#FF7849", "#FFB547", "#FF4D8D", "#C084FC", "#6EE7A8"], HEAT=["#1C1320", "#4A2330", "#A33B3B", "#FF7849", "#FFC56B"]),
+    "matcha": dict(BG0="#06100C", BG2="#10211A", LN="#1F3A2E", TX="#EFFFF6", MU="#9DC4B0", DM="#5F8574",
+                   A=["#B6F36B", "#5EEAB4", "#2DD4BF", "#F5E6A8", "#8FE388"], HEAT=["#0F1D17", "#17432F", "#2A7A4B", "#5EEAB4", "#B6F36B"]),
+}
+THEME = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("THEME", "pro")
+_t = THEMES[THEME]
+BG0, BG2, LN, TX, MU, DM, HEAT = (_t[k] for k in ("BG0", "BG2", "LN", "TX", "MU", "DM", "HEAT"))
+BLUE, MAROON, GREEN, BEIGE, CREAM, GREY = _t.get("N") or (_t["A"][0], _t["A"][1], _t["A"][4], _t["A"][3], _t["TX"], _t["MU"])
+OKC = GREEN  # status LEDs stay green everywhere
+# every block gets its own colour scheme: [primary, secondary, tertiary, quaternary, quinary]
+SCH = {"blue": [BLUE, BEIGE, MAROON, GREEN, GREY], "maroon": [MAROON, BEIGE, BLUE, GREEN, GREY], "green": [GREEN, BEIGE, BLUE, MAROON, GREY],
+       "beige": [BEIGE, MAROON, BLUE, GREEN, GREY], "grey": [GREY, BLUE, BEIGE, GREEN, MAROON], "cream": [CREAM, BLUE, MAROON, GREEN, BEIGE]}
+
+
+def use(name):
+    global CY, VI, PK, AM, GR, ACC
+    CY, VI, PK, AM, GR = SCH[name]
+    ACC = [CY, VI, PK, AM, GR]
+
+
+def ink(c):
+    r, g, b = (int(c[i:i + 2], 16) for i in (1, 3, 5))
+    return BG0 if (.299 * r + .587 * g + .114 * b) > 150 else TX
+
+
+use("blue")
 MONO = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace"
 SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
 NB = "\u00a0"
@@ -59,8 +86,11 @@ def svg(w, h, body, css="", defs=""):
 <linearGradient id="aur" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" stop-color="{CY}"/><stop offset=".5" stop-color="{VI}"/><stop offset="1" stop-color="{PK}"/><animate attributeName="x1" values="0;.7;0" dur="9s" repeatCount="indefinite"/><animate attributeName="x2" values="1;1.7;1" dur="9s" repeatCount="indefinite"/></linearGradient>
 <linearGradient id="aurv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{PK}"/><stop offset=".5" stop-color="{VI}"/><stop offset="1" stop-color="{CY}"/></linearGradient>
 <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{CY}" stop-opacity="0"/><stop offset=".5" stop-color="{CY}"/><stop offset="1" stop-color="{CY}" stop-opacity="0"/></linearGradient>
-<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="45"/></filter>
+<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#fff" stop-opacity=".01"/></linearGradient>
+<linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{VI}" stop-opacity=".45"/><stop offset="1" stop-color="{VI}" stop-opacity="0"/></linearGradient>
 <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#1B2442"/></pattern>
 {defs}
 </defs>
@@ -70,14 +100,17 @@ def svg(w, h, body, css="", defs=""):
 
 
 def frame(w, h, r=16):
+    seed = (w * 7 + h * 3) % 11
     return (f'<clipPath id="cl"><rect width="{w}" height="{h}" rx="{r}"/></clipPath>'
             f'<rect width="{w}" height="{h}" rx="{r}" fill="{BG0}"/>'
             f'<g clip-path="url(#cl)">'
-            f'<circle cx="{w*.08:.0f}" cy="{h*.1:.0f}" r="{h*.75:.0f}" fill="{CY}" opacity=".13" filter="url(#blur)"/>'
-            f'<circle cx="{w*.92:.0f}" cy="{h*.95:.0f}" r="{h*.75:.0f}" fill="{VI}" opacity=".20" filter="url(#blur)"/>'
-            f'<circle cx="{w*.55:.0f}" cy="{h*1.1:.0f}" r="{h*.4:.0f}" fill="{PK}" opacity=".10" filter="url(#blur)"/>'
-            f'<rect width="{w}" height="{h}" fill="url(#dots)"/></g>'
-            f'<rect x=".6" y=".6" width="{w-1.2}" height="{h-1.2}" rx="{r}" stroke="url(#aur)" stroke-opacity=".6" stroke-width="1.2"/>')
+            f'<circle cx="{w*.08:.0f}" cy="{h*.1:.0f}" r="{h*.75:.0f}" fill="{CY}" opacity=".08" filter="url(#blur)"/>'
+            f'<circle cx="{w*.92:.0f}" cy="{h*.95:.0f}" r="{h*.75:.0f}" fill="{VI}" opacity=".10" filter="url(#blur)"/>'
+            f'<circle cx="{w*.55:.0f}" cy="{h*1.1:.0f}" r="{h*.4:.0f}" fill="{PK}" opacity=".07" filter="url(#blur)"/>'
+            f'<rect width="{w}" height="{h}" fill="url(#glass)"/>'
+            f'<rect x="-220" width="140" height="{h}" fill="url(#shine)" transform="skewX(-18)"><animate attributeName="x" from="-220" to="{w+140}" dur="10s" begin="{seed}s" repeatCount="indefinite"/></rect></g>'
+            f'<line x1="{r}" y1=".5" x2="{w-r}" y2=".5" stroke="#fff" stroke-opacity=".14"/>'
+            f'<rect x=".6" y=".6" width="{w-1.2}" height="{h-1.2}" rx="{r}" stroke="url(#aur)" stroke-opacity=".5" stroke-width="1"/>')
 
 
 def card(w, h, inner, css=""):
@@ -110,11 +143,14 @@ def hero():
     b = [frame(w, h, 20)]
     for _ in range(46):
         b.append(f'<circle class="tw" style="animation-delay:{rnd.random()*3:.2f}s" cx="{rnd.randint(20,1180)}" cy="{rnd.randint(96,430)}" r="{rnd.choice([.8,1,1.3,1.7])}" fill="{TX}"/>')
+    for (ox, oy, orr, oc, od) in [(300, 300, 70, CY, 18), (760, 360, 90, PK, 24), (1000, 200, 60, VI, 20)]:
+        b.append(f'<circle cx="{ox}" cy="{oy}" r="{orr}" fill="{oc}" opacity=".16" filter="url(#blur)"><animateTransform attributeName="transform" type="translate" values="0 0;40 -30;-30 20;0 0" dur="{od}s" repeatCount="indefinite"/></circle>')
+    b.append(f'<g><circle cx="1010" cy="265" r="118" stroke="{LN}" stroke-dasharray="3 9" stroke-width="1.5"/><animateTransform attributeName="transform" type="rotate" from="0 1010 265" to="360 1010 265" dur="60s" repeatCount="indefinite"/></g>')
     b.append(waves(w, 440, CY, PK))
     b.append(f'<circle class="pulse" cx="52" cy="52" r="4" fill="{CY}" filter="url(#glow)"/>')
     b.append(T(66, 57, "ABDULLAH-IMRAN / PROFILE.SYS", 13, MU, mono=True, ls=3))
-    b.append(f'<circle class="pulse" cx="856" cy="52" r="4" fill="{GR}" filter="url(#glow)"/>')
-    b.append(T(872, 57, "OPEN TO ROLES & CONTRACTS", 13, GR, mono=True, extra='textLength="280"'))
+    b.append(f'<circle class="pulse" cx="856" cy="52" r="4" fill="{OKC}" filter="url(#glow)"/>')
+    b.append(T(872, 57, "OPEN TO ROLES & CONTRACTS", 13, OKC, mono=True, extra='textLength="280"'))
     b.append(f'<line x1="48" y1="80" x2="1152" y2="80" stroke="url(#aur)" stroke-opacity=".5"/>')
 
     x, y, bw, bh, L = 70, 150, 740, 120, 26
@@ -122,18 +158,20 @@ def hero():
     for cx, cy, dx, dy in [(x, y, 1, 1), (x + bw, y, -1, 1), (x, y + bh, 1, -1), (x + bw, y + bh, -1, -1)]:
         b.append(f'<path class="fade" style="animation-delay:1.2s" d="M{cx},{cy+dy*L} V{cy} H{cx+dx*L}" stroke="{CY}" stroke-width="3" filter="url(#glow)"/>')
     b.append(f'<g class="fade" style="animation-delay:1.6s"><rect x="{x}" y="{y-26}" width="150" height="26" fill="{CY}"/>'
-             + T(x + 12, y - 8, "engineer 0.98", 13, BG0, mono=True, weight=700)
+             + T(x + 12, y - 8, "engineer 0.98", 13, ink(CY), mono=True, weight=700)
              + f'<rect x="{x+bw-210}" y="{y+bh}" width="210" height="26" fill="{PK}"/>'
-             + T(x + bw - 198, y + bh + 18, "computer vision 0.97", 13, BG0, mono=True, weight=700) + '</g>')
-    b.append(T(96, 240, "ABDULLAH IMRAN", 80, "url(#aur)", weight=800, cls="rise", delay=.3,
+             + T(x + bw - 198, y + bh + 18, "computer vision 0.97", 13, ink(PK), mono=True, weight=700) + '</g>')
+    b.append(T(96, 240, "ABDULLAH IMRAN", 80, TX, weight=800, cls="rise", delay=.3,
                extra='textLength="690" lengthAdjust="spacingAndGlyphs" filter="url(#glow)"'))
     b.append(f'<rect class="scan" x="{x}" y="{y}" width="{bw}" height="2" fill="url(#beam)"/>')
     roles = [("AI / ML ENGINEER", CY), ("COMPUTER VISION", PK), ("LLMs · RAG · AGENTS", VI),
-             ("INTELLIGENT PRODUCT DEVELOPMENT", AM), ("FASTAPI · DOCKER · MLOPS", GR)]
+             ("INTELLIGENT PRODUCT DEVELOPMENT", AM), ("FASTAPI · DOCKER · MLOPS", OKC)]
     for k, (r, c) in enumerate(roles):
         b.append(T(70, 328, "▸ " + r, 22, c, mono=True, weight=700, cls="cyc", delay=k * 3))
     b.append(T(70, 368, "AI/ML ENGINEER  ×  COMPUTER VISION  ×  INTELLIGENT PRODUCT DEVELOPMENT", 15, MU, mono=True, cls="fade", delay=.9, extra='textLength="740"'))
-    b.append(T(70, 412, "Build systems that survive contact with reality.", 22, TX, cls="fade", delay=1.2))
+    b.append('<clipPath id="ty"><rect x="70" y="388" width="0" height="34"><animate attributeName="width" from="0" to="530" begin="1.4s" dur="2.4s" fill="freeze"/></rect></clipPath>')
+    b.append('<g clip-path="url(#ty)">' + T(70, 412, "Build systems that survive contact with reality.", 22, TX, extra='textLength="520"') + '</g>')
+    b.append(f'<rect x="598" y="392" width="3" height="24" fill="{CY}"><animate attributeName="opacity" values="1;0;1" dur="1s" begin="1.4s" repeatCount="indefinite"/></rect>')
     b.append(T(70, 474, "LAHORE, PK  ·  REMOTE", 12, MU, mono=True, ls=2))
     b.append(T(1152, 474, "12 SHIPPED SYSTEMS  ·  6 CERTIFICATIONS", 12, MU, mono=True, ls=2, anchor="end"))
 
@@ -196,7 +234,7 @@ def terminal():
              ("OK", "Containerising", "Docker"), ("WARN", "Notebook-only demos", "disabled by policy"),
              ("OK", "Profile ready", "type a command below")]
     b = [frame(w, h, 16), f'<rect x="0" y="0" width="{w}" height="44" rx="16" fill="{BG2}" fill-opacity=".7"/>',
-         f'<circle cx="28" cy="22" r="6" fill="{PK}"/><circle cx="50" cy="22" r="6" fill="{AM}"/><circle cx="72" cy="22" r="6" fill="{GR}"/>',
+         f'<circle cx="28" cy="22" r="6" fill="{MAROON}"/><circle cx="50" cy="22" r="6" fill="{BEIGE}"/><circle cx="72" cy="22" r="6" fill="{OKC}"/>',
          T(600, 27, "abdullah@lahore: ~", 13, MU, mono=True, anchor="middle")]
     clips, t = [], .4
 
@@ -207,12 +245,12 @@ def terminal():
         b.append(f'<g clip-path="url(#t{n})">' + f'<text x="40" y="{y}" font-size="15" font-family="{MONO}">{tsp}</text></g>')
         t += .55
 
-    line(0, 84, [("abdullah@lahore", GR), (":", TX), ("~", VI), ("$ ", TX), ("./boot_profile.sh", CY)])
+    line(0, 84, [("abdullah@lahore", OKC), (":", TX), ("~", VI), ("$ ", TX), ("./boot_profile.sh", CY)])
     for i, (tag, lab, val) in enumerate(lines):
         dots = "." * max(3, 26 - len(lab))
-        line(i + 1, 122 + i * 26, [("[ OK ]" if tag == "OK" else "[WARN]", GR if tag == "OK" else AM), (f"  {lab} {dots} ", MU), (val, TX)])
+        line(i + 1, 122 + i * 26, [("[ OK ]" if tag == "OK" else "[WARN]", OKC if tag == "OK" else BEIGE), (f"  {lab} {dots} ", MU), (val, TX)])
     y_last = 122 + len(lines) * 26 + 12
-    line(99, y_last, [("abdullah@lahore", GR), (":", TX), ("~", VI), ("$ ", TX)])
+    line(99, y_last, [("abdullah@lahore", OKC), (":", TX), ("~", VI), ("$ ", TX)])
     b.append(f'<rect x="{40+19*9.0:.0f}" y="{y_last-14}" width="9" height="18" fill="{CY}"><animate attributeName="opacity" values="1;0;1" dur="1s" begin="{t:.1f}s" repeatCount="indefinite"/></rect>')
     return svg(w, h, "".join(clips) + "".join(b))
 
@@ -221,7 +259,7 @@ def terminal():
 def world(i, title, acc, stat, label, lines, motif, left, right):
     inner = [T(28, 42, f"0{i} / {title}", 13, acc, mono=True, ls=3),
              f'<line x1="28" y1="58" x2="360" y2="58" stroke="{acc}" stroke-opacity=".35"/>',
-             T(28, 150, stat, 76, acc, weight=800, cls="rise", delay=.2 * i, extra='filter="url(#glow)"'),
+             '<g filter="url(#glow)">' + odometer(28, 150, stat, 76, acc, .2 * i, f"w{i}") + '</g>',
              T(28, 176, label, 11, MU, mono=True, ls=2)]
     for k, s in enumerate(lines):
         inner.append(T(28, 214 + k * 22, s, 14, TX if k == 0 else MU, cls="fade", delay=.6 + k * .2 + i * .2))
@@ -259,7 +297,7 @@ def motif_explorer(c):
 
 
 def tile(i, big, label, acc, kind, val):
-    inner = [T(24, 84, big, 54, acc, weight=800, cls="rise", delay=.15 * i, extra='filter="url(#glow)"'), T(24, 114, label, 11, MU, mono=True, ls=2)]
+    inner = ['<g filter="url(#glow)">' + odometer(24, 84, big, 54, acc, .15 * i, f"t{i}") + '</g>', T(24, 114, label, 11, MU, mono=True, ls=2)]
     if kind == "ring":
         C = 2 * math.pi * 30
         inner.append(f'<circle cx="228" cy="68" r="30" stroke="{LN}" stroke-width="7"/>'
@@ -285,18 +323,18 @@ def title(idx, name, sub, acc):
 
 # ------------------------------------------------------------------ skills
 SKILLS = [
-    (["Full-Stack Web", "Development & APIs"], CY,
+    (["Full-Stack Web", "Development & APIs"], BLUE,
      ["Python", "Next.js", "HTML5 / CSS3", "FastAPI", "Django", "Flask", "Django REST Framework", "REST APIs", "Pydantic", "WebSockets", "Celery"]),
-    (["Databases"], GR, ["PostgreSQL", "SQL", "MongoDB", "Airtable", "Redis", "Vector DBs: FAISS, ChromaDB, Weaviate, Pinecone"]),
-    (["Generative AI,", "LLMs & RAG"], VI,
+    (["Databases"], GREEN, ["PostgreSQL", "SQL", "MongoDB", "Airtable", "Redis", "Vector DBs: FAISS, ChromaDB, Weaviate, Pinecone"]),
+    (["Generative AI,", "LLMs & RAG"], MAROON,
      ["Large Language Models", "LLM Fine-Tuning", "OpenAI API", "Google Gemini API", "Grok API", "Groq API", "Ollama Models", "Hugging Face",
       "AI Agents & Automation", "n8n · Zapier", "Function Calling & Tool Use", "Embeddings & Semantic Search", "RAG", "Agentic RAG", "Graph RAG",
       "Chunking & Re-ranking", "LangChain", "LangGraph", "LangSmith", "Ragas / DeepEval", "Model Context Protocol (MCP)", "Prompt Engineering"]),
-    (["Machine Learning", "& Computer Vision"], PK,
+    (["Machine Learning", "& Computer Vision"], BEIGE,
      ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "XGBoost / LightGBM", "CNN", "Hugging Face Transformers", "Model Fine-Tuning", "LoRA / PEFT",
       "Computer Vision", "OpenCV", "YOLO", "MediaPipe", "Multimodal AI", "Faster R-CNN", "Object Tracking (DeepSORT)", "Image Segmentation"]),
-    (["Cloud &", "Deployment"], AM, ["AWS SageMaker", "Docker", "CI/CD", "MLflow", "Streamlit", "Hugging Face Spaces", "Modal", "Vercel", "Netlify"]),
-    (["AI-Assisted", "Development"], CY, ["Claude Code", "Cursor", "GitHub Copilot", "AI-Assisted Debugging", "AI Code Review & Validation"]),
+    (["Cloud &", "Deployment"], GREY, ["AWS SageMaker", "Docker", "CI/CD", "MLflow", "Streamlit", "Hugging Face Spaces", "Modal", "Vercel", "Netlify"]),
+    (["AI-Assisted", "Development"], CREAM, ["Claude Code", "Cursor", "GitHub Copilot", "AI-Assisted Debugging", "AI Code Review & Validation"]),
 ]
 
 
@@ -353,8 +391,8 @@ def radar():
 
 
 def donut():
-    segs = [("Agents & Automation", 3, AM), ("RAG & LLM Apps", 3, VI), ("Computer Vision & Security", 3, CY),
-            ("Healthcare Multimodal AI", 2, PK), ("Predictive ML & Fraud", 1, GR)]
+    segs = [("Agents & Automation", 3, GREEN), ("RAG & LLM Apps", 3, BEIGE), ("Computer Vision & Security", 3, BLUE),
+            ("Healthcare Multimodal AI", 2, MAROON), ("Predictive ML & Fraud", 1, GREY)]
     cx, cy, r = 170, 208, 90
     C, tot, start, g = 2 * math.pi * r, 12, 0, []
     for i, (nm, v, c) in enumerate(segs):
@@ -424,7 +462,7 @@ def heatmap(days):
     x0 = (1200 - (cols * pitch - 4)) // 2
     mx = max((c for _, c in days), default=1) or 1
     total = sum(c for _, c in days)
-    lv = ["#141A30", "#0E4F6B", "#0EA5C6", "#7C5CFF", PK]
+    lv = HEAT
     w, h = 1200, 270
     b = [frame(w, h), T(40, 44, "CONTRIBUTIONS", 13, CY, mono=True, ls=3),
          T(1160, 44, f"{total:,} IN THE LAST 12 MONTHS", 13, MU, mono=True, ls=2, anchor="end")]
@@ -514,18 +552,18 @@ def repo(i, name, d1, d2, chips, kind, acc):
     return card(600, 270, "".join(inner), ".sq{animation:sq 2.4s ease-in-out infinite}@keyframes sq{0%,100%{opacity:.3}50%{opacity:1}}")
 
 
-CATALOGUE = [("HealMatrix AI", "HEALTHCARE · MULTIMODAL", PK, "LLaMA 3.3 · FAISS · RoBERTa"), ("VITA", "HEALTHCARE · MULTIMODAL", PK, "Transformer fusion · ElevenLabs"),
-             ("Cheatify", "COMPUTER VISION", CY, "YOLOv12 · MediaPipe"), ("IntelliFall AI", "CV · IoT", CY, "Fall detection system"),
-             ("MalVision AI", "SECURITY · XAI", CY, "Streamlit · explainability"), ("Research Forge AI", "RAG · RESEARCH", VI, "SearXNG · ChromaDB · Celery"),
-             ("AgentFlow AI", "AGENTS", AM, "LangGraph · SSE · SQLite"), ("Pocho AI", "RAG", VI, "Django · TF-IDF · Grok"),
-             ("QuickByte AI", "LLM APPLICATION", VI, "Nutrition-focused LLM platform"), ("WhatsAgent AI", "AUTOMATION", AM, "n8n · Twilio · Airtable"),
-             ("Quantifier AI", "AUTOMATION", AM, "Lead scoring: HOT · WARM · COLD"), ("FraudShield AI", "PREDICTIVE ML", GR, "scikit-learn")]
+CATALOGUE = [("HealMatrix AI", "HEALTHCARE · MULTIMODAL", MAROON, "LLaMA 3.3 · FAISS · RoBERTa"), ("VITA", "HEALTHCARE · MULTIMODAL", MAROON, "Transformer fusion · ElevenLabs"),
+             ("Cheatify", "COMPUTER VISION", BLUE, "YOLOv12 · MediaPipe"), ("IntelliFall AI", "CV · IoT", BLUE, "Fall detection system"),
+             ("MalVision AI", "SECURITY · XAI", BLUE, "Streamlit · explainability"), ("Research Forge AI", "RAG · RESEARCH", BEIGE, "SearXNG · ChromaDB · Celery"),
+             ("AgentFlow AI", "AGENTS", GREEN, "LangGraph · SSE · SQLite"), ("Pocho AI", "RAG", BEIGE, "Django · TF-IDF · Grok"),
+             ("QuickByte AI", "LLM APPLICATION", BEIGE, "Nutrition-focused LLM platform"), ("WhatsAgent AI", "AUTOMATION", GREEN, "n8n · Twilio · Airtable"),
+             ("Quantifier AI", "AUTOMATION", GREEN, "Lead scoring: HOT · WARM · COLD"), ("FraudShield AI", "PREDICTIVE ML", GREY, "scikit-learn")]
 
 
 def catalogue():
     w, h = 1200, 440
     b = [frame(w, h), T(40, 44, "12 SHIPPED SYSTEMS", 13, CY, mono=True, ls=3)]
-    for i, (c, lab) in enumerate([(PK, "Healthcare"), (CY, "Vision"), (VI, "RAG / LLM"), (AM, "Agents"), (GR, "Predictive")]):
+    for i, (c, lab) in enumerate([(MAROON, "Healthcare"), (BLUE, "Vision"), (BEIGE, "RAG / LLM"), (GREEN, "Agents"), (GREY, "Predictive")]):
         b.append(f'<circle cx="{700+i*98}" cy="40" r="4" fill="{c}"/>' + T(710 + i * 98, 44, lab, 11, MU, mono=True))
     for i, (nm, dom, c, tech) in enumerate(CATALOGUE):
         x, y = 40 + (i % 4) * 282, 70 + (i // 4) * 120
@@ -618,38 +656,274 @@ def footer():
     return svg(w, h, "".join(b), WAVE_CSS)
 
 
+# ------------------------------------------------------------------ odometer + nav + buttons
+def odometer(x, y, s, size, col, begin=0.0, uid="o"):
+    rh, out, cx = size * 1.4, [], x
+    for i, ch in enumerate(s):
+        adv = size * (.34 if ch == "." else .62)
+        if ch.isdigit():
+            d, cid = int(ch), f"{uid}{i}"
+            strip = "".join(T(cx + adv / 2, y + k * rh, str(k), size, col, mono=True, weight=800, anchor="middle") for k in range(10))
+            out.append(f'<clipPath id="{cid}"><rect x="{cx-2:.1f}" y="{y-size*.9:.1f}" width="{adv+4:.1f}" height="{size*1.15:.1f}"/></clipPath>'
+                       f'<g clip-path="url(#{cid})"><g><animateTransform attributeName="transform" type="translate" from="0 0" to="0 {-d*rh:.1f}" '
+                       f'dur="{1.1+d*.12:.2f}s" begin="{begin}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".2 .8 .2 1"/>{strip}</g></g>')
+        else:
+            out.append(T(cx + adv / 2, y, ch, size, col, mono=True, weight=800, anchor="middle"))
+        cx += adv
+    return "".join(out)
+
+
+def navbtn(i, label, acc):
+    inner = (f'<rect x="12" y="10" width="28" height="28" rx="9" fill="{acc}" fill-opacity=".16" stroke="{acc}"/>'
+             + T(26, 29, str(i), 12, acc, True, anchor="middle", weight=700) + T(50, 29, label, 13, TX, weight=700, ls=2)
+             + f'<circle class="pulse" cx="150" cy="24" r="3" fill="{acc}" filter="url(#glow)"/>'
+             + f'<rect x="12" y="43" width="40" height="2" rx="1" fill="{acc}" filter="url(#glow)"><animate attributeName="x" values="12;108;12" dur="4s" begin="{i*.4:.1f}s" repeatCount="indefinite"/></rect>')
+    return card(172, 60, inner)
+
+
+def expand_btn(label, acc):
+    w, h = 1200, 64
+    b = [frame(w, h, 14), f'<rect x="28" y="16" width="32" height="32" rx="10" fill="{acc}" fill-opacity=".15" stroke="{acc}"/>',
+         f'<g stroke="{acc}" stroke-width="2.5" stroke-linecap="round"><line x1="38" y1="32" x2="50" y2="32"/><line x1="44" y1="26" x2="44" y2="38"><animate attributeName="opacity" values="1;0;1" dur="3s" repeatCount="indefinite"/></line></g>',
+         T(78, 38, "EXPAND", 12, acc, True, ls=3, weight=700), T(160, 39, label, 18, TX, weight=700),
+         f'<g><animateTransform attributeName="transform" type="translate" values="0 0;8 0;0 0" dur="1.8s" repeatCount="indefinite"/>' + T(1170, 37, "CLICK TO OPEN  ›", 11, MU, True, anchor="end", ls=2) + '</g>']
+    return svg(w, h, "".join(b))
+
+
+# ------------------------------------------------------------------ data-driven insights
+def weekly(days):
+    return [sum(c for _, c in days[i:i + 7]) for i in range(0, len(days), 7)]
+
+
+def panel(days):
+    w, h = 1200, 440
+    wk = weekly(days)
+    counts = [c for _, c in days]
+    act = [c for c in counts if c]
+    pct, avg, best = round(100 * len(act) / max(1, len(counts))), sum(act) / max(1, len(act)), max(wk)
+    css = ".lit{opacity:.3;animation:lit 6s infinite}@keyframes lit{0%{opacity:.3}5%,22%{opacity:1}28%,100%{opacity:.3}}"
+    b = [frame(w, h, 18), T(40, 46, "MISSION CONTROL", 13, CY, True, ls=3),
+         f'<circle class="pulse" cx="930" cy="42" r="4" fill="{OKC}" filter="url(#glow)"/>', T(1160, 46, "ALL SYSTEMS OPERATIONAL", 12, OKC, True, anchor="end", ls=2),
+         f'<line x1="40" y1="66" x2="1160" y2="66" stroke="{LN}"/><line x1="420" y1="84" x2="420" y2="340" stroke="{LN}"/><line x1="800" y1="84" x2="800" y2="340" stroke="{LN}"/>',
+         T(40, 98, "SYSTEMS", 11, DM, True, ls=3)]
+    rows = [("Perception", "vision · speech · text", CY, True), ("Retrieval", "FAISS · Chroma · rerank", VI, True), ("Agents", "ReAct · provider routing", PK, True),
+            ("Automation", "n8n · Zapier · retries", AM, True), ("Notebook-only demos", "disabled by policy", DM, False)]
+    for i, (nm, sub, c, on) in enumerate(rows):
+        y, tx, bg = 134 + i * 46, 330, .6 + i * .35
+        b.append(T(40, y, nm, 16, TX if on else MU, weight=600) + T(40, y + 18, sub, 11, MU, True))
+        b.append(f'<rect x="{tx}" y="{y-16}" width="52" height="26" rx="13" fill="{c}" fill-opacity=".05" stroke="{c}" stroke-opacity=".35">'
+                 + (f'<animate attributeName="fill-opacity" from=".05" to=".28" begin="{bg:.2f}s" dur=".4s" fill="freeze"/><animate attributeName="stroke-opacity" from=".35" to="1" begin="{bg:.2f}s" dur=".4s" fill="freeze"/>' if on else '') + '</rect>')
+        b.append(f'<circle cx="{tx+13}" cy="{y-3}" r="9" fill="{c}">' + (f'<animate attributeName="cx" from="{tx+13}" to="{tx+39}" begin="{bg:.2f}s" dur=".4s" fill="freeze"/>' if on else '') + '</circle>')
+        b.append(T(tx + 64, y + 1, "ON" if on else "OFF", 11, c, True, weight=700))
+    sx0, sx1, sy0, sy1 = 450, 770, 126, 250
+    mx = max(wk) or 1
+    pts = [(sx0 + i * (sx1 - sx0) / (len(wk) - 1), sy1 - (v / mx) * (sy1 - sy0)) for i, v in enumerate(wk)]
+    d = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    b += [T(450, 98, "CONTRIBUTION PULSE", 11, DM, True, ls=3), T(770, 98, "52 WEEKS", 11, MU, True, anchor="end"),
+          f'<line x1="{sx0}" y1="{sy1}" x2="{sx1}" y2="{sy1}" stroke="{LN}"/>',
+          f'<path class="fade" style="animation-delay:1s" d="{d} L{sx1},{sy1} L{sx0},{sy1} Z" fill="url(#ar)"/>',
+          f'<path d="{d}" stroke="url(#aur)" stroke-width="2.5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#glow)"><animate attributeName="stroke-dashoffset" from="100" to="0" dur="2.4s" fill="freeze"/></path>',
+          f'<circle class="pulse" cx="{pts[-1][0]:.1f}" cy="{pts[-1][1]:.1f}" r="5" fill="{PK}" filter="url(#glow)"/>']
+    for k, (val, lab, c) in enumerate([(f"{pct}%", "ACTIVE DAYS", CY), (f"{avg:.1f}", "AVG / ACTIVE DAY", VI), (str(best), "BEST WEEK", PK)]):
+        x = 450 + k * 112
+        b.append(T(x, 306, val, 26, c, True, weight=800, cls="rise", delay=.5 + k * .2) + T(x, 326, lab, 9, MU, True, ls=1))
+    cx, cy = 886, 160
+    for r in (18, 32, 46):
+        b.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" stroke="{LN}" stroke-width="1.5"/>')
+    for k, (r, c, dur, rev) in enumerate([(18, CY, 3, 0), (32, PK, 5, 1), (46, VI, 8, 0)]):
+        a, z = ("360", "0") if rev else ("0", "360")
+        b.append(f'<g><circle cx="{cx+r}" cy="{cy}" r="4" fill="{c}" filter="url(#glow)"/><animateTransform attributeName="transform" type="rotate" from="{a} {cx} {cy}" to="{z} {cx} {cy}" dur="{dur}s" repeatCount="indefinite"/></g>')
+    b += [f'<circle class="pulse" cx="{cx}" cy="{cy}" r="6" fill="{AM}" filter="url(#glow)"/>', T(960, 168, "3", 52, "url(#aur)", weight=800), T(960, 192, "ACTIVE BUILDS", 10, MU, True, ls=2),
+          T(830, 232, "BUILDING NOW", 11, DM, True, ls=3)]
+    for k, nm in enumerate(["Procurement Platform", "AI Coding Assistant", "Lahori"]):
+        y = 262 + k * 30
+        b.append(T(830, y, nm, 14, TX) + f'<rect x="1030" y="{y-9}" width="130" height="4" rx="2" fill="{LN}"/>'
+                 f'<rect x="1030" y="{y-9}" width="44" height="4" rx="2" fill="{ACC[k]}" filter="url(#glow)"><animate attributeName="x" values="1030;1116;1030" dur="{2.6+k*.5:.1f}s" begin="{k*.4}s" repeatCount="indefinite"/></rect>')
+    b += [f'<rect x="40" y="366" width="1120" height="52" rx="12" fill="{BG2}" fill-opacity=".7" stroke="{LN}"/>',
+          f'<circle class="pulse" cx="66" cy="392" r="4" fill="{OKC}" filter="url(#glow)"/>', T(82, 396, "OPEN TO ROLES & CONTRACTS  ·  REMOTE  ·  LAHORE, PK", 12, TX, True, ls=1)]
+    for k, (wd, x) in enumerate([("BUILD", 800), ("EVALUATE", 870), ("OPTIMIZE", 970), ("DEPLOY", 1070)]):
+        b.append(T(x, 396, wd, 13, ACC[k], True, weight=700, cls="lit", delay=k * 1.5))
+    return svg(w, h, "".join(b), css)
+
+
+def weekday(days):
+    tot = [0] * 7
+    for ds, c in days:
+        tot[dt.date.fromisoformat(ds).weekday()] += c
+    names, mx = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"], max(tot) or 1
+    bi = tot.index(max(tot))
+    css = ".bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:grow .9s cubic-bezier(.2,.8,.2,1) forwards}@keyframes grow{to{transform:scaleY(1)}}"
+    b = [T(28, 40, "MOST ACTIVE WEEKDAY", 13, CY, True, ls=3), T(560, 40, f"{names[bi]} LEADS", 11, MU, True, anchor="end", ls=2), f'<line x1="28" y1="228" x2="560" y2="228" stroke="{LN}"/>']
+    for i, v in enumerate(tot):
+        bh, x = max(3, int(v / mx * 130)), 38 + i * 74
+        fill = "url(#aurv)" if i == bi else ACC[i % 5]
+        b.append(f'<rect class="bar" style="animation-delay:{i*.08:.2f}s" x="{x}" y="{228-bh}" width="44" height="{bh}" rx="6" fill="{fill}" fill-opacity="{1 if i == bi else .55}" filter="url(#glow)"/>')
+        b.append(T(x + 22, 228 - bh - 8, str(v), 11, TX if i == bi else MU, True, anchor="middle", cls="fade", delay=.9))
+        b.append(T(x + 22, 250, names[i], 11, CY if i == bi else DM, True, anchor="middle", weight=700 if i == bi else 400))
+    return card(600, 300, "".join(b), css)
+
+
+def trend(days):
+    wk = weekly(days)
+    x0, x1, y0, y1, mx = 36, 552, 92, 224, (max(wk) or 1)
+    pts = [(x0 + i * (x1 - x0) / (len(wk) - 1), y1 - v / mx * (y1 - y0)) for i, v in enumerate(wk)]
+    d = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    ay = y1 - (sum(wk) / len(wk)) / mx * (y1 - y0)
+    b = [T(28, 40, "WEEKLY TREND", 13, PK, True, ls=3), T(560, 40, "52 WEEKS", 11, MU, True, anchor="end", ls=2), f'<line x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}" stroke="{LN}"/>',
+         f'<line x1="{x0}" y1="{ay:.1f}" x2="{x1}" y2="{ay:.1f}" stroke="{AM}" stroke-dasharray="4 5" stroke-opacity=".7"/>', T(x1, ay - 6, "AVERAGE", 10, AM, True, anchor="end"),
+         f'<path class="fade" style="animation-delay:1.2s" d="{d} L{x1},{y1} L{x0},{y1} Z" fill="url(#ar)"/>',
+         f'<path d="{d}" stroke="url(#aur)" stroke-width="3" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#glow)"><animate attributeName="stroke-dashoffset" from="100" to="0" dur="2.6s" fill="freeze"/></path>',
+         f'<circle r="5" fill="{TX}" filter="url(#glow)"><animateMotion path="{d}" dur="7s" begin="2.6s" repeatCount="indefinite"/></circle>']
+    return card(600, 300, "".join(b))
+
+
+def kpi(i, big, label, sub, acc):
+    inner = ('<g filter="url(#glow)">' + odometer(24, 74, big, 52, acc, .1 * i, f"k{i}") + '</g>'
+             + T(24, 102, label, 11, TX, True, ls=2, weight=700) + T(24, 120, sub, 10, MU, True))
+    return card(300, 140, inner)
+
+
+def stackmix():
+    w, h = 1200, 220
+    segs = [("Python & ML", 35), ("LLMs & agents", 25), ("Backend & APIs", 20), ("Retrieval", 12), ("DevOps", 8)]
+    b = [frame(w, h), T(40, 44, "TOOLCHAIN EMPHASIS", 13, AM, True, ls=3), T(1160, 44, "SELF-ESTIMATED SHARE OF MY STACK", 11, MU, True, anchor="end", ls=2)]
+    x = 40
+    for i, (nm, v) in enumerate(segs):
+        sw = 1120 * v / 100 - 6
+        c = ACC[i]
+        b.append(f'<rect x="{x}" y="76" width="0" height="40" rx="10" fill="{c}" fill-opacity=".9" filter="url(#glow)"><animate attributeName="width" from="0" to="{sw:.0f}" dur="1s" begin="{i*.3:.1f}s" fill="freeze"/></rect>')
+        b.append(f'<g class="fade" style="animation-delay:{.6+i*.3:.1f}s">' + T(x, 158, f"{v}%", 28, c, weight=800) + T(x, 182, nm.upper(), 11, MU, True, ls=1) + '</g>')
+        x += sw + 6
+    return svg(w, h, "".join(b))
+
+
+def kpi_values(days):
+    wk = weekly(days)
+    counts = [c for _, c in days]
+    act = [c for c in counts if c]
+    cur, k = 0, len(days) - 1
+    if k >= 0 and days[k][1] == 0:
+        k -= 1
+    while k >= 0 and days[k][1] > 0:
+        cur, k = cur + 1, k - 1
+    return round(100 * len(act) / max(1, len(counts))), sum(act) / max(1, len(act)), max(wk), cur
+
+
+def readme():
+    h = lambda c: c.lstrip("#")
+    c = lambda n, wd, alt="": f'<img src="./cards/{n}.svg" width="{wd}" alt="{alt}" />'
+    nav = [("panel", "PANEL"), ("stack", "STACK"), ("insights", "INSIGHTS"), ("activity", "ACTIVITY"), ("systems", "SYSTEMS"), ("journey", "JOURNEY"), ("contact", "CONTACT")]
+    navrow = "".join(f'<a href="#{a}"><img src="./cards/nav-{i+1}.svg" width="14.285%" alt="{lab}" /></a>' for i, (a, lab) in enumerate(nav))
+    st = f"bg_color={h(BG2)}&title_color={h(BLUE)}&icon_color={h(GREEN)}&text_color={h(TX)}&ring_color={h(MAROON)}&hide_border=true"
+    return f"""<!-- Generated by scripts/render_readme_cards.py (theme: {THEME}). Re-run it to change the theme:
+     python scripts/render_readme_cards.py {" | ".join(THEMES)}
+     Keep cards in a row on one line with no spaces between them. -->
+<div align="center">
+<a href="https://github.com/abdullahmran-101">{c("hero", "100%", "Abdullah Imran. AI/ML engineer. Computer vision and intelligent product development. Lahore, Pakistan.")}</a><br>
+{navrow}<br>
+{c("marquee-tech", "100%", "Python, PyTorch, TensorFlow, OpenCV, YOLO, FastAPI, Django, LangGraph, RAG, MCP, Docker")}<br>
+{c("intro", "100%", "I design, build and deploy end-to-end intelligent systems: the model, the retrieval layer, the agent logic, the backend API and the container it ships in.")}<br>
+<a name="panel"></a>{c("panel", "100%", "Mission control: systems status toggles, contribution pulse, active builds, open to roles and contracts")}<br>
+{c("terminal", "100%", "Terminal boot sequence: identity, perception, knowledge, reasoning, agents, services, containers")}<br>
+{c("world-engineer", "33.333%", "ENGINEER: computer vision, deep learning, 90% model accuracy")}{c("world-builder", "33.333%", "BUILDER: 12 shipped systems")}{c("world-explorer", "33.333%", "EXPLORER: 3 active builds")}<br>
+{c("tile-1", "25%", "12 systems shipped")}{c("tile-2", "25%", "6 certifications")}{c("tile-3", "25%", "90% model accuracy")}{c("tile-4", "25%", "30% faster ML pipeline")}<br>
+<a name="stack"></a>{c("title-stack", "100%", "Tech stack")}<br>
+<details open>
+<summary><img src="./cards/btn-skills.svg" width="100%" alt="Expand: full skill matrix" /></summary>
+<br>
+{c("skills", "100%", "Skills: full-stack web and APIs, databases, generative AI and RAG, machine learning and computer vision, cloud and deployment, AI-assisted development")}<br>
+</details>
+<img src="https://skillicons.dev/icons?i=python,pytorch,tensorflow,keras,opencv,sklearn,fastapi,django,flask,nextjs,html,css,mongodb,postgres,redis,docker,aws,vercel,netlify,git,vscode&theme=dark&perline=11" alt="Technology logos" /><br>
+<a name="insights"></a>{c("title-insights", "100%", "Insights")}<br>
+{c("radar", "50%", "Self-assessed proficiency radar")}{c("donut", "50%", "Project portfolio by domain")}<br>
+{c("stackmix", "100%", "Toolchain emphasis: Python and ML 35%, LLMs and agents 25%, backend 20%, retrieval 12%, DevOps 8%")}<br>
+{c("pipeline", "100%", "How I build: perceive, retrieve, reason, serve, ship")}<br>
+<a name="activity"></a>{c("title-contrib", "100%", "Activity")}<br>
+{c("kpi-1", "25%", "Active days")}{c("kpi-2", "25%", "Average per active day")}{c("kpi-3", "25%", "Best week")}{c("kpi-4", "25%", "Current streak")}<br>
+{c("heatmap", "100%", "Contribution heatmap, refreshed daily")}<br>
+{c("weekday", "50%", "Most active weekday")}{c("trend", "50%", "Weekly contribution trend")}<br>
+{c("activity", "100%", "Contributions by month with total, longest streak and busiest day")}<br>
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=abdullahmran-101&show_icons=true&count_private=true&include_all_commits=true&{st}" alt="GitHub stats" /> <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=abdullahmran-101&layout=compact&langs_count=8&{st}" alt="Top languages" /><br>
+<img src="https://streak-stats.demolab.com/?user=abdullahmran-101&hide_border=true&background={h(BG2)}&ring={h(GREEN)}&fire={h(MAROON)}&currStreakLabel={h(BLUE)}&sideLabels={h(TX)}&currStreakNum={h(TX)}&sideNums={h(TX)}&dates={h(MU)}&stroke={h(LN)}" alt="Streak stats" /><br>
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=abdullahmran-101&bg_color={h(BG0)}&color={h(BLUE)}&line={h(GREEN)}&point={h(MAROON)}&area=true&area_color={h(GREEN)}&hide_border=true" width="100%" alt="Activity graph" /><br>
+<a name="systems"></a>{c("title-systems", "100%", "Featured systems")}<br>
+<a href="https://github.com/abdullahmran-101/Heal-Matrix-AI">{c("repo-healmatrix", "50%", "HealMatrix AI")}</a><a href="https://github.com/abdullahmran-101/Cheatify-AI-Proctoring-System">{c("repo-cheatify", "50%", "Cheatify")}</a><br>
+<a href="https://github.com/abdullahmran-101/Agentflow-AI">{c("repo-agentflow", "50%", "AgentFlow AI")}</a><a href="https://github.com/abdullahmran-101/Research-Forge-AI">{c("repo-researchforge", "50%", "Research Forge AI")}</a><br>
+<details>
+<summary><img src="./cards/btn-catalogue.svg" width="100%" alt="Expand: all 12 shipped systems" /></summary>
+<br>
+{c("catalogue", "100%", "All 12 shipped systems by domain")}<br>
+</details>
+<a name="journey"></a>{c("title-journey", "100%", "Journey and craft")}<br>
+{c("timeline", "100%", "Timeline from 2022 to freelance AI/ML engineer in 2026")}<br>
+<details>
+<summary><img src="./cards/btn-principles.svg" width="100%" alt="Expand: engineering principles" /></summary>
+<br>
+{c("principles", "100%", "Engineering principles")}<br>
+</details>
+{c("title-now", "100%", "Now")}<br>
+{c("now", "100%", "Active development and currently exploring")}<br>
+{c("engage", "100%", "Work with me: full-time, contract builds, automation, prototype to production")}<br>
+{c("marquee-principles", "100%", "Grounded outputs. Observable agents. Deployable by default.")}<br>
+<a name="contact"></a>{c("title-contact", "100%", "Contact")}
+</div>
+
+<p align="center">
+<a href="https://www.linkedin.com/in/abdullah-imran-211658230"><img src="https://img.shields.io/badge/LinkedIn-abdullah--imran-{h(BLUE)}?style=for-the-badge&logo=linkedin&logoColor=white&labelColor={h(BG2)}" alt="LinkedIn" /></a>
+<a href="mailto:abdullahmran.001@gmail.com"><img src="https://img.shields.io/badge/Email-abdullahmran.001%40gmail.com-{h(GREEN)}?style=for-the-badge&logo=gmail&logoColor=white&labelColor={h(BG2)}" alt="Email" /></a>
+<a href="https://github.com/abdullahmran-101"><img src="https://img.shields.io/badge/GitHub-abdullahmran--101-{h(MAROON)}?style=for-the-badge&logo=github&logoColor=white&labelColor={h(BG2)}" alt="GitHub" /></a>
+</p>
+
+<div align="center">
+{c("footer", "100%", "The model is the easy part. The system around it is the product.")}
+</div>
+"""
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for old in OUT.glob("*.svg"):
         old.unlink()
     days, _ = fetch_days()
+    pct, avg, best, cur = kpi_values(days)
+    B = lambda sch, f, *a, **k: (use(sch), f(*a, **k))[1]
+    TECH = ["PYTHON", "PYTORCH", "TENSORFLOW", "OPENCV", "YOLO", "FASTAPI", "DJANGO", "LANGGRAPH", "LANGCHAIN", "RAG", "MCP", "DOCKER", "POSTGRESQL", "REDIS", "MLFLOW", "SAGEMAKER", "HUGGING FACE", "N8N"]
+    PRIN = ["GROUNDED OUTPUTS", "OBSERVABLE AGENTS", "DEPLOYABLE BY DEFAULT", "BUILD. EVALUATE. OPTIMIZE. DEPLOY.", "FROM RAW DATA TO DEPLOYABLE INTELLIGENCE"]
     F = {
-        "hero": hero(),
-        "marquee-tech": marquee(["PYTHON", "PYTORCH", "TENSORFLOW", "OPENCV", "YOLO", "FASTAPI", "DJANGO", "LANGGRAPH", "LANGCHAIN", "RAG", "MCP", "DOCKER", "POSTGRESQL", "REDIS", "MLFLOW", "SAGEMAKER", "HUGGING FACE", "N8N"]),
-        "intro": intro(), "terminal": terminal(),
-        "world-engineer": world(1, "ENGINEER", CY, "90%", "BODY-FAT MODEL ACCURACY", ["Computer vision · Deep learning", "YOLOv12 · MediaPipe · KeypointRCNN", "Production-ready intelligent systems"], motif_engineer(CY), False, True),
-        "world-builder": world(2, "BUILDER", VI, "12", "SHIPPED SYSTEMS", ["FastAPI · Django · Celery · Docker", "RAG apps, agents, automation APIs", "From prototype to deployed product"], motif_builder(VI), True, True),
-        "world-explorer": world(3, "EXPLORER", PK, "3", "ACTIVE BUILDS", ["Agentic AI · multimodal fusion", "LLMs, retrieval, new tooling", "Experiments and open source"], motif_explorer(PK), True, False),
-        "tile-1": tile(1, "12", "SYSTEMS SHIPPED", CY, "dots", 12), "tile-2": tile(2, "6", "CERTIFICATIONS", VI, "dots", 6),
-        "tile-3": tile(3, "90%", "MODEL ACCURACY", PK, "ring", 90), "tile-4": tile(4, "30%", "FASTER ML PIPELINE", AM, "ring", 30),
-        "title-stack": title("01", "TECH STACK", "LAYERS OF THE SYSTEM", CY), "skills": skills(),
-        "title-insights": title("02", "INSIGHTS", "PROFICIENCY AND PORTFOLIO", VI), "radar": radar(), "donut": donut(), "pipeline": pipeline(),
-        "title-contrib": title("03", "CONTRIBUTIONS", "COMMITS, DAILY", PK), "heatmap": heatmap(days), "activity": activity(days),
-        "title-systems": title("04", "FEATURED SYSTEMS", "SELECTED REPOSITORIES", AM),
-        "repo-healmatrix": repo(1, "HealMatrix AI", "Crisis-gated multimodal assistant fusing", "text, voice, face and posture.", ["RAG", "RoBERTa", "FastAPI", "Docker"], "fusion", PK),
-        "repo-cheatify": repo(2, "Cheatify", "Real-time exam proctoring with object", "detection, pose and gaze risk scoring.", ["YOLOv12", "MediaPipe", "OpenCV"], "gauge", CY),
-        "repo-agentflow": repo(3, "AgentFlow AI", "Multi-provider ReAct platform with live", "tool traces, memory and failover.", ["LangGraph", "SSE", "FastAPI"], "loop", AM),
-        "repo-researchforge": repo(4, "Research Forge AI", "Self-hosted research-to-report pipeline", "with citation enforcement.", ["SearXNG", "ChromaDB", "Celery"], "stages", VI),
-        "catalogue": catalogue(),
-        "title-journey": title("05", "JOURNEY & CRAFT", "TIMELINE AND PRINCIPLES", GR), "timeline": timeline(), "principles": principles(),
-        "title-now": title("06", "NOW", "BUILDING AND EXPLORING", CY), "now": now(), "engage": engage(),
-        "marquee-principles": marquee(["GROUNDED OUTPUTS", "OBSERVABLE AGENTS", "DEPLOYABLE BY DEFAULT", "BUILD. EVALUATE. OPTIMIZE. DEPLOY.", "FROM RAW DATA TO DEPLOYABLE INTELLIGENCE"], rev=True),
-        "title-contact": title("07", "CONTACT", "OPEN TO REMOTE", PK), "footer": footer(),
+        "hero": B("blue", hero), "marquee-tech": B("grey", marquee, TECH), "intro": B("beige", intro), "panel": B("green", panel, days), "terminal": B("grey", terminal),
+        "world-engineer": B("blue", world, 1, "ENGINEER", BLUE, "90%", "BODY-FAT MODEL ACCURACY", ["Computer vision · Deep learning", "YOLOv12 · MediaPipe · KeypointRCNN", "Production-ready intelligent systems"], motif_engineer(BLUE), False, True),
+        "world-builder": B("maroon", world, 2, "BUILDER", MAROON, "12", "SHIPPED SYSTEMS", ["FastAPI · Django · Celery · Docker", "RAG apps, agents, automation APIs", "From prototype to deployed product"], motif_builder(MAROON), True, True),
+        "world-explorer": B("green", world, 3, "EXPLORER", GREEN, "3", "ACTIVE BUILDS", ["Agentic AI · multimodal fusion", "LLMs, retrieval, new tooling", "Experiments and open source"], motif_explorer(GREEN), True, False),
+        "tile-1": B("blue", tile, 1, "12", "SYSTEMS SHIPPED", BLUE, "dots", 12), "tile-2": B("beige", tile, 2, "6", "CERTIFICATIONS", BEIGE, "dots", 6),
+        "tile-3": B("maroon", tile, 3, "90%", "MODEL ACCURACY", MAROON, "ring", 90), "tile-4": B("green", tile, 4, "30%", "FASTER ML PIPELINE", GREEN, "ring", 30),
+        "title-stack": B("blue", title, "01", "TECH STACK", "LAYERS OF THE SYSTEM", BLUE), "skills": B("grey", skills), "btn-skills": B("blue", expand_btn, "FULL SKILL MATRIX", BLUE),
+        "title-insights": B("green", title, "02", "INSIGHTS", "PROFICIENCY AND PORTFOLIO", GREEN), "radar": B("blue", radar), "donut": B("maroon", donut),
+        "stackmix": B("beige", stackmix), "pipeline": B("grey", pipeline),
+        "title-contrib": B("beige", title, "03", "ACTIVITY", "PULSE AND PATTERNS", BEIGE),
+        "kpi-1": B("blue", kpi, 1, f"{pct}%", "ACTIVE DAYS", "of the last 12 months", BLUE), "kpi-2": B("maroon", kpi, 2, f"{avg:.1f}", "AVG / ACTIVE DAY", "contributions", MAROON),
+        "kpi-3": B("green", kpi, 3, str(best), "BEST WEEK", "contributions in 7 days", GREEN), "kpi-4": B("beige", kpi, 4, str(cur), "CURRENT STREAK", "days in a row", BEIGE),
+        "heatmap": B("green", heatmap, days), "weekday": B("maroon", weekday, days), "trend": B("blue", trend, days), "activity": B("beige", activity, days),
+        "title-systems": B("maroon", title, "04", "FEATURED SYSTEMS", "SELECTED REPOSITORIES", MAROON),
+        "repo-healmatrix": B("maroon", repo, 1, "HealMatrix AI", "Crisis-gated multimodal assistant fusing", "text, voice, face and posture.", ["RAG", "RoBERTa", "FastAPI", "Docker"], "fusion", MAROON),
+        "repo-cheatify": B("blue", repo, 2, "Cheatify", "Real-time exam proctoring with object", "detection, pose and gaze risk scoring.", ["YOLOv12", "MediaPipe", "OpenCV"], "gauge", BLUE),
+        "repo-agentflow": B("green", repo, 3, "AgentFlow AI", "Multi-provider ReAct platform with live", "tool traces, memory and failover.", ["LangGraph", "SSE", "FastAPI"], "loop", GREEN),
+        "repo-researchforge": B("beige", repo, 4, "Research Forge AI", "Self-hosted research-to-report pipeline", "with citation enforcement.", ["SearXNG", "ChromaDB", "Celery"], "stages", BEIGE),
+        "catalogue": B("grey", catalogue), "btn-catalogue": B("maroon", expand_btn, "ALL 12 SHIPPED SYSTEMS", MAROON),
+        "title-journey": B("grey", title, "05", "JOURNEY & CRAFT", "TIMELINE AND PRINCIPLES", GREY), "timeline": B("cream", timeline),
+        "principles": B("beige", principles), "btn-principles": B("beige", expand_btn, "ENGINEERING PRINCIPLES", BEIGE),
+        "title-now": B("blue", title, "06", "NOW", "BUILDING AND EXPLORING", BLUE), "now": B("blue", now), "engage": B("maroon", engage),
+        "marquee-principles": B("beige", marquee, PRIN, rev=True),
+        "title-contact": B("green", title, "07", "CONTACT", "OPEN TO REMOTE", GREEN), "footer": B("grey", footer),
     }
+    for i, (_, lab) in enumerate([("panel", "PANEL"), ("stack", "STACK"), ("insights", "INSIGHTS"), ("activity", "ACTIVITY"), ("systems", "SYSTEMS"), ("journey", "JOURNEY"), ("contact", "CONTACT")]):
+        sch = ["green", "blue", "green", "beige", "maroon", "grey", "cream"][i]
+        use(sch)
+        F[f"nav-{i+1}"] = navbtn(i + 1, lab, CY)
     for name, content in F.items():
         minidom.parseString(content.encode("utf-8"))
         (OUT / f"{name}.svg").write_text(content, encoding="utf-8")
-    print(f"wrote {len(F)} cards to {OUT}")
+    (OUT.parent / "README.md").write_text(readme(), encoding="utf-8")
+    print(f"theme={THEME}: wrote {len(F)} cards + README.md")
 
 
 if __name__ == "__main__":
