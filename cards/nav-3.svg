@@ -1,28 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="172" height="60" viewBox="0 0 172 60" fill="none" role="img">
-<defs>
-<linearGradient id="aur" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" stop-color="#6FB08C"/><stop offset=".5" stop-color="#D8C3A0"/><stop offset="1" stop-color="#5E8FD0"/><animate attributeName="x1" values="0;.7;0" dur="9s" repeatCount="indefinite"/><animate attributeName="x2" values="1;1.7;1" dur="9s" repeatCount="indefinite"/></linearGradient>
-<linearGradient id="aurv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5E8FD0"/><stop offset=".5" stop-color="#D8C3A0"/><stop offset="1" stop-color="#6FB08C"/></linearGradient>
-<linearGradient id="beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6FB08C" stop-opacity="0"/><stop offset=".5" stop-color="#6FB08C"/><stop offset="1" stop-color="#6FB08C" stop-opacity="0"/></linearGradient>
-<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="45"/></filter>
-<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#fff" stop-opacity=".01"/></linearGradient>
-<linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8C3A0" stop-opacity=".45"/><stop offset="1" stop-color="#D8C3A0" stop-opacity="0"/></linearGradient>
-<pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#1B2442"/></pattern>
-
-</defs>
-<style>
-.pulse{animation:pulse 2.2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.rise{opacity:0;animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.fade{opacity:0;animation:fade .8s ease forwards}
-@keyframes fade{to{opacity:1}}
-.tw{animation:tw 3s ease-in-out infinite}
-@keyframes tw{0%,100%{opacity:.12}50%{opacity:.9}}
-.float{animation:float 5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
-</style>
-<g transform="translate(6,6)"><clipPath id="cl"><rect width="160" height="48" rx="16"/></clipPath><rect width="160" height="48" rx="16" fill="#14161A"/><g clip-path="url(#cl)"><circle cx="13" cy="5" r="36" fill="#6FB08C" opacity=".08" filter="url(#blur)"/><circle cx="147" cy="46" r="36" fill="#D8C3A0" opacity=".10" filter="url(#blur)"/><circle cx="88" cy="53" r="19" fill="#5E8FD0" opacity=".07" filter="url(#blur)"/><rect width="160" height="48" fill="url(#glass)"/><rect x="-220" width="140" height="48" fill="url(#shine)" transform="skewX(-18)"><animate attributeName="x" from="-220" to="300" dur="10s" begin="10s" repeatCount="indefinite"/></rect></g><line x1="16" y1=".5" x2="144" y2=".5" stroke="#fff" stroke-opacity=".14"/><rect x=".6" y=".6" width="158.8" height="46.8" rx="16" stroke="url(#aur)" stroke-opacity=".5" stroke-width="1"/><rect x="12" y="10" width="28" height="28" rx="9" fill="#6FB08C" fill-opacity=".16" stroke="#6FB08C"/><text x="26" y="29" font-size="12" font-weight="700" fill="#6FB08C" text-anchor="middle" letter-spacing="0" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace" >3</text><text x="50" y="29" font-size="13" font-weight="700" fill="#F1E8D6" text-anchor="start" letter-spacing="2" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" >INSIGHTS</text><circle class="pulse" cx="150" cy="24" r="3" fill="#6FB08C" filter="url(#glow)"/><rect x="12" y="43" width="40" height="2" rx="1" fill="#6FB08C" filter="url(#glow)"><animate attributeName="x" values="12;108;12" dur="4s" begin="1.2s" repeatCount="indefinite"/></rect></g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="114.29" height="56" viewBox="0 0 114.29 56" role="img" aria-label="Insights">
+<title>Insights</title><defs><path id="m0" d="M661 -20C1009 -20 1209 260 1209 744C1209 1227 1006 1510 661 1510C316 1510 113 1227 113 744C113 259 314 -20 661 -20ZM661 175C454 175 338 383 338 744C338 1106 454 1316 661 1316C867 1316 983 1107 983 744C983 383 867 175 661 175Z"/><path id="m1" d="M643 -20C948 -20 1171 162 1171 409C1171 596 1059 732 860 763V774C1016 815 1117 936 1117 1104C1117 1323 936 1510 649 1510C373 1510 154 1343 147 1102H367C372 1238 501 1319 645 1319C796 1319 895 1228 895 1091C895 949 781 855 617 855H490V669H617C822 669 940 565 940 417C940 273 815 176 641 176C481 176 356 258 347 390H116C124 146 340 -20 643 -20Z"/><path id="m2" d="M393 1490H165V0H393Z"/><path id="m3" d="M165 0H396V795C396 872 388 1026 379 1213C487 1013 544 910 617 793L1120 0H1384V1490H1153V642C1153 556 1157 417 1168 273C1102 416 1035 529 989 603L428 1490H165Z"/><path id="m4" d="M665 -25C1015 -25 1217 159 1217 412C1217 681 978 783 788 832L643 870C529 900 375 953 375 1094C375 1220 489 1312 670 1312C839 1312 960 1234 975 1098H1197C1190 1335 981 1510 675 1510C375 1510 147 1339 147 1081C147 877 291 752 535 687L709 639C869 596 992 545 992 415C992 271 853 175 664 175C492 175 348 251 335 414H106C120 142 330 -25 665 -25Z"/><path id="m5" d="M791 -20C1152 -20 1413 216 1413 593V764H825V576H1190C1185 338 1028 188 792 188C529 188 339 386 339 745C339 1105 532 1302 783 1302C979 1302 1112 1193 1166 1019H1400C1350 1309 1102 1510 781 1510C395 1510 113 1220 113 744C113 273 386 -20 791 -20Z"/><path id="m6" d="M165 0H393V664H1131V0H1360V1490H1131V860H393V1490H165Z"/><path id="m7" d="M90 1294H555V0H784V1294H1247V1490H90Z"/></defs>
+<rect width="114.29" height="56" fill="#FFFFFF"/>
+<rect x="0" y="0" width="114.29" height="1" fill="#111111"/>
+<line x1="0" y1="55.5" x2="114.29" y2="55.5" stroke="#6B665E" stroke-width="1"/>
+<g transform="translate(14 33) scale(0.00537 -0.00537)" fill="#6B665E"><use xlink:href="#m0" x="0"/><use xlink:href="#m1" x="1403.92"/></g>
+<g transform="translate(38 33) scale(0.00537 -0.00537)" fill="#111111"><use xlink:href="#m2" x="0"/><use xlink:href="#m3" x="721.84"/><use xlink:href="#m4" x="2434.68"/><use xlink:href="#m2" x="3921.52"/><use xlink:href="#m5" x="4643.36"/><use xlink:href="#m6" x="6338.2"/><use xlink:href="#m7" x="8027.04"/><use xlink:href="#m4" x="9527.88"/></g>
+<line x1="113.79" y1="1" x2="113.79" y2="55" stroke="#6B665E" stroke-width="1"/>
 </svg>
