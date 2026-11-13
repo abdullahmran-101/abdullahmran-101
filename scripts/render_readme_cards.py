@@ -2,7 +2,7 @@
 """Renders every static SVG card in ../cards and the README that composes them.
 
 Design system
-  Colour   four values only: WHITE, BLACK, BEIGE, GREY. No gradients, opacity, filters or animation.
+  Colour   four values only: PAGE, INK, PANEL, GREY. No gradients, opacity, filters or animation.
   Type     Inter (Display cut for headings), converted to outlines so it renders identically
            everywhere (GitHub blocks web fonts inside SVG images). Fonts live in ../fonts.
   Grid     880-unit canvas, 40-unit page margin, 800-unit content width, 16-unit gutter.
@@ -25,11 +25,12 @@ OUT = ROOT / "cards"
 FONT_DIR = ROOT / "fonts"
 
 # ------------------------------------------------------------------ palette
-WHITE = "#FFFFFF"
-BLACK = "#111111"
-BEIGE = "#F0EBE1"
-GREY = "#6B665E"
-PALETTE = {WHITE, BLACK, BEIGE, GREY}
+PAGE = "#0A0A0A"    # black: page, nav, large surfaces
+INK = "#F5F4F0"     # white: headings and key text
+PANEL = "#1C1C1C"   # dark grey: cards and technical surfaces
+GREY = "#8C8B87"    # secondary text, metadata
+SAND = "#D8CFBD"    # beige: selected cards only
+PALETTE = {PAGE, INK, PANEL, GREY, SAND}
 
 # ------------------------------------------------------------------ grid
 W, M, CW, G = 880, 40, 800, 16
@@ -204,7 +205,7 @@ class Canvas:
                 self._ids[key] = None
         return self._ids[key]
 
-    def text(self, x, y, txt, size=14, wt="r", fill=BLACK, anchor="start", track=0.0):
+    def text(self, x, y, txt, size=14, wt="r", fill=INK, anchor="start", track=0.0):
         """Baseline-anchored text drawn as outlines. Returns rendered width."""
         face = FACES[wt]
         pos, total = layout(txt, size, wt, track)
@@ -226,13 +227,13 @@ class Canvas:
     def label(self, x, y, txt, fill=GREY, anchor="start", size=11):
         return self.text(x, y, txt.upper(), size, "m", fill, anchor, 0.08)
 
-    def para(self, x, y, txt, size, wt, maxw, lh, fill=BLACK, track=0.0, first_black=False):
+    def para(self, x, y, txt, size, wt, maxw, lh, fill=INK, track=0.0, first_black=False):
         lines = wrap(txt, size, wt, maxw, track)
         for i, ln in enumerate(lines):
             self.text(x, y + i * lh, ln, size, wt, fill, "start", track)
         return len(lines)
 
-    def tag(self, x, y, txt, fill=BEIGE, ink=BLACK, size=12, h=26, px=11, wt="r"):
+    def tag(self, x, y, txt, fill=PANEL, ink=INK, size=12, h=26, px=11, wt="r"):
         w = measure(txt, size, wt) + 2 * px
         self.rect(x, y, w, h, fill, R_TAG)
         self.text(x + px, y + h / 2 + 0.3637 * size, txt, size, wt, ink)
@@ -243,7 +244,7 @@ class Canvas:
         return (f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
                 f'width="{n(self.w)}" height="{n(self.h)}" viewBox="0 0 {n(self.w)} {n(self.h)}" role="img" aria-label="{esc(self.title)}">\n'
                 f'<title>{esc(self.title)}</title>{defs}\n'
-                f'<rect width="{n(self.w)}" height="{n(self.h)}" fill="{WHITE}"/>\n' + "\n".join(self.parts) + "\n</svg>\n")
+                f'<rect width="{n(self.w)}" height="{n(self.h)}" fill="{PAGE}"/>\n' + "\n".join(self.parts) + "\n</svg>\n")
 
 
 def esc(s):
@@ -271,10 +272,10 @@ def pct(w):
 # ------------------------------------------------------------------ shared pieces
 def section_header(idx, name, caption):
     c = Canvas(W, 132, f"{idx} {name}")
-    c.rect(M, 24, CW, 2, BLACK)
+    c.rect(M, 24, CW, 2, INK)
     c.label(M, 56, idx)
     c.label(W - M, 56, caption, anchor="end")
-    c.text(M, 106, name, 34, "d", BLACK, track=-0.025)
+    c.text(M, 106, name, 34, "d", INK, track=-0.025)
     return c.render()
 
 
@@ -285,42 +286,37 @@ def card_columns(count):
 
 # ------------------------------------------------------------------ hero
 def hero():
-    c = Canvas(W, 456, "Abdullah Imran. AI/ML engineer. Computer vision and intelligent product development. Lahore, Pakistan.")
-    c.rect(M, 24, CW, 2, BLACK)
-    c.label(M, 56, "Profile")
-    sw = c.label(W - M, 56, "Open to roles and contracts", fill=BLACK, anchor="end")
-    c.rect(W - M - sw - 18, 49, 8, 8, BLACK)
-
-    c.text(M, 170, "Abdullah Imran", 60, "d", BLACK, track=-0.035)
-    c.text(M, 220, "AI/ML Engineer", 22, "m", BLACK, track=-0.01)
-    c.para(M, 252, "Computer vision and intelligent product development.", 16, "r", 440, 24, GREY)
-    c.label(M, 296, "Lahore, Pakistan  ·  Remote")
-
+    c = Canvas(W, 456, "Abdullah Imran. ML Engineer and Data Scientist. Lahore, Pakistan.")
+    c.rect(M, 24, CW, 2, INK)
+    c.label(M, 56, "Portfolio")
+    sw = c.label(W - M, 56, "Open to roles and contracts", fill=INK, anchor="end")
+    c.rect(W - M - sw - 18, 49, 8, 8, SAND)
+    c.text(M, 170, "Abdullah Imran", 60, "d", INK, track=-0.035)
+    c.text(M, 220, "ML Engineer | Data Scientist", 22, "m", INK, track=-0.01)
+    c.para(M, 254, "I build intelligent systems, machine learning solutions, AI-powered applications and data-driven products.", 15, "r", 470, 23, GREY)
     px, py, pw, rows = 568, 88, 272, 3
-    c.rrect(px, py, pw, rows * 64, BEIGE)
-    facts = [("Location", "Lahore, Pakistan · Remote"), ("Focus", "Computer vision · LLMs · Agents"), ("Status", "Open to roles and contracts")]
+    c.rrect(px, py, pw, rows * 64 + 12, PANEL)
+    facts = [("Location", "Lahore, Pakistan \u00b7 Remote"), ("Focus", "ML \u00b7 GenAI \u00b7 Computer vision"), ("Status", "Open to roles and contracts")]
     for i, (k, v) in enumerate(facts):
         y = py + i * 64
         c.label(px + 20, y + 28, k, size=10.5)
-        c.text(px + 20, y + 49, v, 14, "m", BLACK)
+        c.text(px + 20, y + 49, v, 14, "m", INK)
         if i < rows - 1:
             c.hair(px + 20, px + pw - 20, y + 64 - 1)
-
     sy = 328
-    c.rrect(M, sy, CW, 96, BLACK)
-    stats = [("12", "Systems shipped"), ("6", "Certifications"), ("90%", "Model accuracy"), ("30%", "Faster ML pipeline")]
+    c.rrect(M, sy, CW, 96, SAND)
+    stats = [("12", "Systems shipped"), ("6", "Certifications"), ("5", "Roles & communities"), ("90%", "Model accuracy")]
     for i, (big, lab) in enumerate(stats):
         x = M + i * 200
-        c.text(x + 24, sy + 50, big, 36, "d", WHITE, track=-0.03)
-        c.label(x + 24, sy + 74, lab, fill=BEIGE, size=10.5)
+        c.text(x + 24, sy + 50, big, 36, "d", PAGE, track=-0.03)
+        c.label(x + 24, sy + 74, lab, fill=PAGE, size=10.5)
         if i:
-            c.vhair(x, sy + 20, sy + 76, GREY)
+            c.vhair(x, sy + 20, sy + 76, PAGE)
     return c.render()
 
 
 # ------------------------------------------------------------------ nav
-NAV = [("overview", "Overview"), ("stack", "Stack"), ("insights", "Insights"), ("activity", "Activity"),
-       ("systems", "Systems"), ("journey", "Journey"), ("contact", "Contact")]
+NAV = [("about", "About"), ("journey", "Journey"), ("systems", "Systems"), ("stack", "Stack"), ("activity", "Activity"), ("contact", "Contact")]
 
 
 def nav_cell(i):
@@ -329,58 +325,114 @@ def nav_cell(i):
     x0, x1 = L["x"] - (M if i == 0 else 0), L["x"] + L["cw"]
     x0 = M if i == 0 else 0
     x1 = L["w"] - (M if i == len(NAV) - 1 else 0)
-    c.rect(x0, 0, x1 - x0, 1, BLACK)
+    c.rect(x0, 0, x1 - x0, 1, INK)
     c.hair(x0, x1, 55)
     pad = 14
     c.text(x0 + pad, 33, f"{i+1:02d}", 11, "m", GREY, track=0.04)
-    c.text(x0 + pad + 24, 33, NAV[i][1].upper(), 11, "m", BLACK, track=0.08)
+    c.text(x0 + pad + 24, 33, NAV[i][1].upper(), 11, "m", INK, track=0.08)
     if i < len(NAV) - 1:
         c.vhair(x1 - 1, 1, 55)
     return c.render()
 
 
 # ------------------------------------------------------------------ overview
-def intro():
-    c = Canvas(W, 10, "I design, build and deploy end-to-end intelligent systems: the model, the retrieval layer, the agent logic, the backend API and the container it ships in.")
-    c.label(M, 52, "About")
-    txt = ("I design, build and deploy end-to-end intelligent systems: the model, the retrieval layer, "
-           "the agent logic, the backend API and the container it ships in.")
-    k = c.para(240, 58, txt, 22, "m", 600, 34, BLACK, track=-0.012)
-    y = 58 + (k - 1) * 34 + 40
-    x = 240
-    stages = ["Perception", "Knowledge", "Reasoning", "Service", "Delivery"]
-    for i, s in enumerate(stages):
-        x += c.tag(x, y, s.upper(), BEIGE, BLACK, 10.5, 28, 12, "m") + 0
-        if i < len(stages) - 1:
-            c.text(x + 9, y + 19, "→", 12, "r", GREY, "middle")
-            x += 18
-    c.h = int(y + 28 + 40)
+def _hash(a, b, c):
+    v = math.sin(a * 127.1 + b * 311.7 + c * 74.7) * 43758.5453
+    return v - math.floor(v)
+
+
+def _silhouette(u, v):
+    hx, hy = (u - .5) / .165, (v - .37) / (.2 if v < .37 else .25)
+    head = hx * hx + hy * hy < 1
+    neck = abs(u - .5) < .07 and .52 < v < .68
+    dx = abs(u - .5)
+    sh = dx < .48 and v > .64 + (dx / .5) ** 2.4 * .22
+    if not (head or neck or sh):
+        return -1
+    l = .5 - ((u - .5) * 1.1 + (v - .37) * .55) * 1.5
+    l = .22 + max(0, min(1, l)) * .68
+    if head and v < .27:
+        l = .2 + _hash(u * 90, v * 90, 1) * .22
+    if head and .33 < v < .38 and dx > .04 and abs(dx - .075) < .035:
+        l = .08
+    if neck and not head:
+        l = .28
+    if sh and not head and not neck:
+        l = .32 + max(0, .3 - dx) * .5
+    return max(0, min(1, l + (_hash(u * 200, v * 200, 3) - .5) * .12))
+
+
+def about():
+    H = 496
+    c = Canvas(W, H + 16, "About Abdullah Imran. ML Engineer and Data Scientist, with an ASCII portrait placeholder.")
+    c.rrect(M, 0, 336, H, PANEL)
+    c.label(M + 12, 34, "portrait.ascii", size=10)
+    c.label(M + 324, 34, "52 x 35 cells", anchor="end", size=10)
+    cx0, cy0, cw_, ch_ = M + 12, 50, 312, 390
+    c.rect(cx0, cy0, cw_, ch_, PAGE, 3)
+    cols = 52
+    cw = cw_ / cols
+    chh = cw * 1.85
+    rows = int(ch_ // chh)
+    RAMP, BG = " .\u00b7:-=+*#%@", "01{}<>/;=+"
+    scan = 11
+    for y in range(rows):
+        for x in range(cols):
+            L = _silhouette((x + .5) / cols, (y + .5) / rows)
+            if L < 0:
+                if _hash(x, y, 4) > .08:
+                    continue
+                ch, col = BG[int(_hash(y, x, 2) * len(BG))], PANEL
+                if abs(y - scan) < 2:
+                    col = GREY
+            else:
+                ch = RAMP[min(len(RAMP) - 1, int(L * len(RAMP)))]
+                if ch == " ":
+                    continue
+                col = INK if L > .62 else GREY if L > .3 else PANEL
+                if y == scan:
+                    col = SAND
+            c.text(cx0 + (x + .5) * cw, cy0 + (y + .5) * chh + .33 * chh * .88, ch, chh * .88, "m", col, "middle")
+    c.label(M + 12, H - 22, "Placeholder silhouette", size=10)
+    c.label(M + 324, H - 22, "Rendered locally", anchor="end", size=10)
+
+    x = 416
+    w = W - M - x
+    c.label(x, 34, "About")
+    k = c.para(x, 82, "ML Engineer and Data Scientist. I turn messy data and ambiguous problems into measurable, deployable intelligence.", 22, "m", w, 31, INK, track=-0.015)
+    y = 82 + (k - 1) * 31 + 36
+    k = c.para(x, y, "My work spans classical machine learning and statistical modeling through to LLM applications, retrieval pipelines and computer vision. I write the Python and SQL, build the FastAPI services around the models, and integrate them into the systems that use them.", 14, "r", w, 22, GREY)
+    ny = H - 128
+    c.rrect(x, ny, w, 128, SAND)
+    c.label(x + 24, ny + 36, "Now", fill=PAGE, size=10.5)
+    c.text(x + 24, ny + 66, "Freelance ML Engineer & Data Scientist", 16, "s", PAGE, track=-0.01)
+    c.para(x + 24, ny + 92, "Independent and remote since October 2026. Open to roles and client contracts.", 13, "r", w - 48, 20, PAGE)
     return c.render()
 
 
 def practice():
-    items = [("Engineer", "Computer vision · Deep learning", "YOLOv12 · MediaPipe · KeypointRCNN", "Production-ready intelligent systems"),
-             ("Builder", "FastAPI · Django · Celery · Docker", "RAG apps, agents, automation APIs", "From prototype to deployed product"),
-             ("Explorer", "Agentic AI · Multimodal fusion", "LLMs, retrieval, new tooling", "Experiments and open source")]
-    cols = card_columns(3)
-    inner = cols[0][1] - 44
-    blocks = []
-    for it in items:
-        blocks.append([wrap(s, 13, "m" if k == 0 else "r", inner) for k, s in enumerate(it[1:])])
-    nlines = max(sum(len(b) for b in bl) for bl in blocks)
-    H = 124 + nlines * 20 + 2 * 14 + 28
-    c = Canvas(W, H + 16, "Practice areas: engineer, builder, explorer")
-    for (x, cw), it, bl in zip(cols, items, blocks):
-        c.rrect(x, 0, cw, H, BEIGE)
-        c.label(x + 22, 40, f"{items.index(it)+1:02d}", size=10.5)
-        c.text(x + 22, 84, it[0], 26, "d", BLACK, track=-0.02)
-        c.hair(x + 22, x + cw - 22, 106)
-        y = 138
-        for k, lines in enumerate(bl):
-            for ln in lines:
-                c.text(x + 22, y, ln, 13, "m" if k == 0 else "r", BLACK if k == 0 else GREY)
-                y += 20
-            y += 14
+    items = [("ML/DL", "Machine Learning & Deep Learning", "Model design, training, evaluation and tuning."),
+             ("STATS", "Statistical Analysis & Predictive Modeling", "Turning data into forecasts and decisions."),
+             ("GENAI", "Generative AI, LLMs & RAG", "Grounded, retrieval-backed language applications."),
+             ("CV/NLP", "Computer Vision & NLP", "Perception and language models in real products."),
+             ("API", "Python, SQL & FastAPI", "Backend engineering around the model."),
+             ("AUTO", "AI Integration & Automation", "Intelligent workflows wired into existing systems.")]
+    ch = 148
+    c = Canvas(W, 2 * ch + 16, "Capabilities: machine learning, statistics, generative AI, computer vision and NLP, backend, automation")
+    def draw(cv, x, y, w, it, i):
+        tag, t, b = it
+        tw = measure(tag, 10.5, "s", 0.06) + 16
+        cv.rect(x + 22, y + 22, tw, 20, INK, 3)
+        cv.text(x + 30, y + 36, tag, 10.5, "s", PAGE, track=0.06)
+        yy = y + 70
+        for ln in wrap(t, 15, "s", w - 44, -0.01):
+            cv.text(x + 22, yy, ln, 15, "s", INK, track=-0.01)
+            yy += 20
+        yy += 4
+        for ln in wrap(b, 12.5, "r", w - 44):
+            cv.text(x + 22, yy, ln, 12.5, "r", GREY)
+            yy += 18
+    grid_panel(c, 0, items, 3, ch, draw, line=PAGE)
     return c.render()
 
 
@@ -393,7 +445,7 @@ def architecture():
     H = top + 36 + len(rows) * rh + 16
     c = Canvas(W, H, "System architecture: identity, perception, knowledge, reasoning, agents, services, containers and delivery policy")
     c.label(M, 26, "System architecture")
-    c.rect(M, top, CW, 1, BLACK)
+    c.rect(M, top, CW, 1, INK)
     c.label(M + 48, top + 24, "Layer", size=10.5)
     c.label(M + 260, top + 24, "Components", size=10.5)
     c.label(M + CW, top + 24, "Status", size=10.5, anchor="end")
@@ -402,11 +454,11 @@ def architecture():
         y = top + 36 + 1 + i * rh
         base = y + rh / 2 + CAP * 14 / 2
         c.text(M, base, f"{i+1:02d}", 11, "m", GREY, track=0.04)
-        c.text(M + 48, base, lay, 14, "s", BLACK)
-        c.text(M + 260, base, comp, 14, "r", BLACK)
+        c.text(M + 48, base, lay, 14, "s", INK)
+        c.text(M + 260, base, comp, 14, "r", INK)
         tw = measure(st, 12, "m")
-        c.text(M + CW, base, st, 12, "m", BLACK, "end")
-        c.rect(M + CW - tw - 16, y + rh / 2 - 3.5, 7, 7, BLACK)
+        c.text(M + CW, base, st, 12, "m", INK, "end")
+        c.rect(M + CW - tw - 16, y + rh / 2 - 3.5, 7, 7, INK)
         c.hair(M, M + CW, y + rh - 1)
     return c.render()
 
@@ -446,14 +498,14 @@ def skills():
     H += 16
     c = Canvas(W, H, "Skills: " + "; ".join(s[0] for s in SKILLS))
     c.label(M, 26, "Full skill matrix")
-    c.rect(M, 44, CW, 1, BLACK)
+    c.rect(M, 44, CW, 1, INK)
     for name, left, placed, rows, y, h, cnt in groups:
         top = y + 24
         for i, ln in enumerate(left):
-            c.text(M, top + 16 + i * 22, ln, 16, "s", BLACK, track=-0.01)
+            c.text(M, top + 16 + i * 22, ln, 16, "s", INK, track=-0.01)
         c.label(M, top + 16 + len(left) * 22 + 2, f"{cnt} skills", size=10.5)
         for it, x, row, w in placed:
-            c.tag(x, top + row * (th + gap), it, BEIGE, BLACK, 12, th, 11)
+            c.tag(x, top + row * (th + gap), it, PANEL, INK, 12, th, 11)
         if y + h < H - 16:
             c.hair(M, M + CW, y + h - 1)
     return c.render()
@@ -464,8 +516,8 @@ def radar_domain():
     H = 380
     c = Canvas(W, H + 16, "Self-assessed proficiency radar and project portfolio by domain")
     (xa, cwa), (xb, cwb) = card_columns(2)
-    c.rrect(xa, 0, cwa, H, BEIGE)
-    c.rrect(xb, 0, cwb, H, BEIGE)
+    c.rrect(xa, 0, cwa, H, PANEL)
+    c.rrect(xb, 0, cwb, H, PANEL)
 
     # radar
     data = [("Python", 92), ("LLM Apps", 90), ("RAG", 88), ("FastAPI", 86), ("Agents", 85), ("Vision", 82), ("Docker", 78), ("MLOps", 72)]
@@ -474,33 +526,33 @@ def radar_domain():
     cx, cy, R, k = xa + cwa / 2, 218, 98, len(data)
     ang = lambda i: -math.pi / 2 + i * 2 * math.pi / k
     pts = [(cx + R * v / 100 * math.cos(ang(i)), cy + R * v / 100 * math.sin(ang(i))) for i, (_, v) in enumerate(data)]
-    c.poly(pts, WHITE)  # solid fill first, grid is drawn over it so it stays readable
+    c.poly(pts, PAGE)  # solid fill first, grid is drawn over it so it stays readable
     for f in (.25, .5, .75, 1):
         c.poly([(cx + R * f * math.cos(ang(i)), cy + R * f * math.sin(ang(i))) for i in range(k)], "none", GREY, 1)
     for i in range(k):
         c.line(cx, cy, cx + R * math.cos(ang(i)), cy + R * math.sin(ang(i)), GREY, 1)
-    c.poly(pts, "none", BLACK, 1.75)
+    c.poly(pts, "none", INK, 1.75)
     for x, y in pts:
-        c.rect(x - 3, y - 3, 6, 6, BLACK)
+        c.rect(x - 3, y - 3, 6, 6, INK)
     for i, (nm, v) in enumerate(data):
         a = ang(i)
         lx, ly = cx + (R + 22) * math.cos(a), cy + (R + 22) * math.sin(a)
         an = "middle" if abs(math.cos(a)) < .2 else ("start" if math.cos(a) > 0 else "end")
         dy = -16 if math.sin(a) < -.9 else (10 if math.sin(a) > .9 else -2)
-        c.text(lx, ly + dy, nm, 12, "m", BLACK, an)
+        c.text(lx, ly + dy, nm, 12, "m", INK, an)
         c.text(lx, ly + dy + 14, str(v), 11, "r", GREY, an)
 
     # domains
     segs = [("Agents & Automation", 3), ("RAG & LLM Apps", 3), ("Computer Vision & Security", 3), ("Healthcare Multimodal AI", 2), ("Predictive ML & Fraud", 1)]
     c.label(xb + 24, 38, "Portfolio by domain")
     c.text(xb + 24, 60, "Systems shipped by area", 12, "r", GREY)
-    c.text(xb + cwb - 24, 62, "12", 44, "d", BLACK, "end", -0.03)
+    c.text(xb + cwb - 24, 62, "12", 44, "d", INK, "end", -0.03)
     for i, (nm, v) in enumerate(segs):
         y = 118 + i * 50
-        c.text(xb + 24, y, nm, 13, "m", BLACK)
-        c.text(xb + cwb - 24, y, str(v), 13, "s", BLACK, "end")
-        c.rect(xb + 24, y + 13, cwb - 48, 4, WHITE)
-        c.rect(xb + 24, y + 13, (cwb - 48) * v / 3, 4, BLACK)
+        c.text(xb + 24, y, nm, 13, "m", INK)
+        c.text(xb + cwb - 24, y, str(v), 13, "s", INK, "end")
+        c.rect(xb + 24, y + 13, cwb - 48, 4, PAGE)
+        c.rect(xb + 24, y + 13, (cwb - 48) * v / 3, 4, INK)
     return c.render()
 
 
@@ -512,8 +564,8 @@ def stackmix():
     x = M
     for i, (nm, v) in enumerate(segs):
         w = CW * v / 100
-        c.rect(x, 48, w - (3 if i < len(segs) - 1 else 0), 28, BLACK if i % 2 == 0 else GREY)
-        c.text(x, 128, f"{v}%", 28, "d", BLACK, track=-0.03)
+        c.rect(x, 48, w - (3 if i < len(segs) - 1 else 0), 28, INK if i % 2 == 0 else GREY)
+        c.text(x, 128, f"{v}%", 28, "d", INK, track=-0.03)
         c.label(x, 152, nm, size=10)
         x += w
     return c.render()
@@ -525,7 +577,7 @@ def pipeline():
              ("Ship", ["Docker \u00b7 Compose", "VPS deployment", "n8n automation"])]
     H = 232
     c = Canvas(W, H + 16, "How I build: perceive, retrieve, reason, serve, ship")
-    c.rrect(M, 0, CW, H, BEIGE)
+    c.rrect(M, 0, CW, H, PANEL)
     c.label(M + 24, 38, "How I build")
     c.label(M + CW - 24, 38, "Grounded outputs. Observable agents. Deployable by default.", anchor="end", size=10.5)
     c.hair(M + 24, M + CW - 24, 58)
@@ -536,9 +588,9 @@ def pipeline():
         if i:
             c.vhair(x, 84, H - 32)
         c.text(px, 100, f"{i+1:02d}", 11, "m", GREY, track=0.04)
-        c.text(px, 134, nm, 19, "d", BLACK, track=-0.02)
+        c.text(px, 134, nm, 19, "d", INK, track=-0.02)
         for k, s in enumerate(items):
-            c.text(px, 166 + k * 21, s, 12, "m" if k == 0 else "r", BLACK if k == 0 else GREY)
+            c.text(px, 166 + k * 21, s, 12, "m" if k == 0 else "r", INK if k == 0 else GREY)
     return c.render()
 
 
@@ -591,9 +643,9 @@ def kpis(days):
     H = 128
     c = Canvas(W, H + 16, "Activity summary: " + "; ".join(f"{b} {l}" for b, l, _ in items))
     for (x, cw), (big, lab, sub) in zip(card_columns(4), items):
-        c.rrect(x, 0, cw, H, BEIGE)
+        c.rrect(x, 0, cw, H, PANEL)
         c.label(x + 22, 36, lab, size=10)
-        c.text(x + 22, 82, big, 40, "d", BLACK, track=-0.035)
+        c.text(x + 22, 82, big, 40, "d", INK, track=-0.035)
         c.text(x + 22, 106, sub, 12, "r", GREY)
     return c.render()
 
@@ -610,8 +662,8 @@ def heatmap(days):
     H = top + 7 * pitch + 78
     c = Canvas(W, int(H), f"Contribution heatmap: {total:,} contributions in the last 12 months")
     c.label(M, 26, "Contributions")
-    c.label(M + CW, 26, f"{total:,} in the last 12 months", fill=BLACK, anchor="end")
-    c.rect(M, 44, CW, 1, BLACK)
+    c.label(M + CW, 26, f"{total:,} in the last 12 months", fill=INK, anchor="end")
+    c.rect(M, 44, CW, 1, INK)
     last_m, last_c = None, -9
     for ci, wk in enumerate(weeks):
         m = dt.date.fromisoformat(wk[0][0]).strftime("%b")
@@ -621,10 +673,10 @@ def heatmap(days):
         for ri, (_, v) in enumerate(wk):
             lvl = 0 if v == 0 else 1 + min(3, int(v * 4 / (mx + 1)))
             x, y = x0 + ci * pitch, top + ri * pitch
-            c.rect(x, y, cell, cell, BEIGE)
+            c.rect(x, y, cell, cell, PANEL)
             if lvl:
                 s = cell * (0, .3, .5, .72, 1)[lvl]
-                c.rect(x + (cell - s) / 2, y + (cell - s) / 2, s, s, BLACK)
+                c.rect(x + (cell - s) / 2, y + (cell - s) / 2, s, s, INK)
     for ri, nm in ((0, "Mon"), (2, "Wed"), (4, "Fri")):
         c.text(M, top + ri * pitch + cell / 2 + 4, nm, 11, "r", GREY)
     ly = top + 7 * pitch + 28
@@ -633,10 +685,10 @@ def heatmap(days):
     c.text(lx - 8, ly + cell / 2 + 4, "Less", 11, "r", GREY, "end")
     for k in range(5):
         x = lx + k * (cell + 5)
-        c.rect(x, ly, cell, cell, BEIGE)
+        c.rect(x, ly, cell, cell, PANEL)
         if k:
             s = cell * (0, .3, .5, .72, 1)[k]
-            c.rect(x + (cell - s) / 2, ly + (cell - s) / 2, s, s, BLACK)
+            c.rect(x + (cell - s) / 2, ly + (cell - s) / 2, s, s, INK)
     c.text(lx + 5 * (cell + 5) + 3, ly + cell / 2 + 4, "More", 11, "r", GREY)
     return c.render()
 
@@ -645,8 +697,8 @@ def weekday_trend(days):
     H = 308
     c = Canvas(W, H + 16, "Most active weekday and weekly contribution trend")
     (xa, cwa), (xb, cwb) = card_columns(2)
-    c.rrect(xa, 0, cwa, H, BEIGE)
-    c.rrect(xb, 0, cwb, H, BEIGE)
+    c.rrect(xa, 0, cwa, H, PANEL)
+    c.rrect(xb, 0, cwb, H, PANEL)
     tot = [0] * 7
     for ds, v in days:
         tot[dt.date.fromisoformat(ds).weekday()] += v
@@ -654,7 +706,7 @@ def weekday_trend(days):
     mx = max(tot) or 1
     bi = tot.index(mx)
     c.label(xa + 24, 38, "Most active weekday")
-    c.label(xa + cwa - 24, 38, f"{names[bi]} leads", fill=BLACK, anchor="end")
+    c.label(xa + cwa - 24, 38, f"{names[bi]} leads", fill=INK, anchor="end")
     base = 256
     c.hair(xa + 24, xa + cwa - 24, base)
     pitch = (cwa - 48) / 7
@@ -662,23 +714,23 @@ def weekday_trend(days):
     for i, v in enumerate(tot):
         bh = max(3, v / mx * 150)
         x = xa + 24 + i * pitch + (pitch - bw) / 2
-        c.rect(x, base - bh, bw, bh, BLACK if i == bi else GREY)
-        c.text(x + bw / 2, base - bh - 9, str(v), 11, "m", BLACK if i == bi else GREY, "middle")
-        c.text(x + bw / 2, base + 22, names[i], 11, "m" if i == bi else "r", BLACK if i == bi else GREY, "middle")
+        c.rect(x, base - bh, bw, bh, INK if i == bi else GREY)
+        c.text(x + bw / 2, base - bh - 9, str(v), 11, "m", INK if i == bi else GREY, "middle")
+        c.text(x + bw / 2, base + 22, names[i], 11, "m" if i == bi else "r", INK if i == bi else GREY, "middle")
 
     wk = weekly(days)
     c.label(xb + 24, 38, "Weekly trend")
     x0, x1, y0, y1 = xb + 24, xb + cwb - 24, 100, 256
     wm = max(wk) or 1
     pts = [(x0 + i * (x1 - x0) / (len(wk) - 1), y1 - v / wm * (y1 - y0)) for i, v in enumerate(wk)]
-    c.poly(pts + [(x1, y1), (x0, y1)], WHITE)
-    c.poly(pts, "none", BLACK, 1.75, close=False)
+    c.poly(pts + [(x1, y1), (x0, y1)], PAGE)
+    c.poly(pts, "none", INK, 1.75, close=False)
     avg = sum(wk) / len(wk)
     ay = y1 - avg / wm * (y1 - y0)
     c.line(x0, ay, x1, ay, GREY, 1, "3 4")
     c.hair(x0, x1, y1)
-    c.label(xb + cwb - 24, 38, f"Average {avg:.0f} / week", fill=BLACK, anchor="end")
-    c.rect(pts[-1][0] - 4, pts[-1][1] - 4, 8, 8, BLACK)
+    c.label(xb + cwb - 24, 38, f"Average {avg:.0f} / week", fill=INK, anchor="end")
+    c.rect(pts[-1][0] - 4, pts[-1][1] - 4, 8, 8, INK)
     c.text(x0, y1 + 22, "52 weeks ago", 11, "r", GREY)
     c.text(x1, y1 + 22, "This week", 11, "r", GREY, "end")
     return c.render()
@@ -700,15 +752,15 @@ def monthly(days):
     total = sum(v for _, v in days)
     H = 296
     c = Canvas(W, H + 16, f"Contributions by month. Total {total:,}, longest streak {streak} days, busiest day {best[0]} with {best[1]}")
-    c.rrect(M, 0, CW, H, BEIGE)
+    c.rrect(M, 0, CW, H, PANEL)
     c.label(M + 24, 38, "Contributions by month")
     base, pitch, bw = 244, 40.5, 24
     c.hair(M + 24, M + 24 + 12 * pitch, base)
     for i, (k, v) in enumerate(zip(keys, vals)):
         bh = max(3, v / top * 140)
         x = M + 24 + i * pitch + (pitch - bw) / 2
-        c.rect(x, base - bh, bw, bh, BLACK if v == top else GREY)
-        c.text(x + bw / 2, base - bh - 9, str(v), 11, "m", BLACK if v == top else GREY, "middle")
+        c.rect(x, base - bh, bw, bh, INK if v == top else GREY)
+        c.text(x + bw / 2, base - bh - 9, str(v), 11, "m", INK if v == top else GREY, "middle")
         c.text(x + bw / 2, base + 22, dt.date(k[0], k[1], 1).strftime("%b"), 11, "r", GREY, "middle")
     sx = M + 24 + 12 * pitch + 24
     c.vhair(sx - 12, 24, H - 24)
@@ -716,7 +768,7 @@ def monthly(days):
     for i, (lab, val) in enumerate(stats):
         y = 38 + i * 84
         c.label(sx + 12, y, lab, size=10)
-        c.text(sx + 12, y + 40, val, 30, "d", BLACK, track=-0.03)
+        c.text(sx + 12, y + 40, val, 30, "d", INK, track=-0.03)
         if i < 2:
             c.hair(sx + 12, M + CW - 24, y + 62)
     return c.render()
@@ -750,18 +802,18 @@ def repo(i):
     H = repo_height()
     c = Canvas(L["w"], H + 16, f"{name}. {desc}")
     x, cw = L["x"], L["cw"]
-    c.rrect(x, 0, cw, H, BEIGE)
+    c.rrect(x, 0, cw, H, PANEL)
     c.label(x + 28, 40, dom, size=10.5)
     c.label(x + cw - 28, 40, f"{i+1:02d}", anchor="end", size=10.5)
-    c.text(x + 28, 92, name, 28, "d", BLACK, track=-0.025)
+    c.text(x + 28, 92, name, 28, "d", INK, track=-0.025)
     k = c.para(x + 28, 126, desc, 14, "r", cw - 56, 22, GREY)
     ty = 126 + (k - 1) * 22 + 24
     tx = x + 28
     for t in tags:
-        tx += c.tag(tx, ty, t, WHITE, BLACK, 12, 26, 11) + 6
+        tx += c.tag(tx, ty, t, PAGE, INK, 12, 26, 11) + 6
     c.hair(x + 28, x + cw - 28, H - 56)
-    c.text(x + 28, H - 24, "View repository", 13, "s", BLACK)
-    c.text(x + cw - 28, H - 24, "↗", 15, "r", BLACK, "end")
+    c.text(x + 28, H - 24, "View repository", 13, "s", INK)
+    c.text(x + cw - 28, H - 24, "↗", 15, "r", INK, "end")
     return c.render()
 
 
@@ -773,14 +825,14 @@ CATALOGUE = [("HealMatrix AI", "Healthcare · Multimodal", "LLaMA 3.3 · FAISS �
              ("Quantifier AI", "Automation", "Lead scoring: HOT · WARM · COLD"), ("FraudShield AI", "Predictive ML", "scikit-learn")]
 
 
-def grid_panel(c, y, items, cols, cell_h, draw):
+def grid_panel(c, y, items, cols, cell_h, draw, line=PAGE):
     cw = CW / cols
     rows = math.ceil(len(items) / cols)
-    c.rrect(M, y, CW, rows * cell_h, BEIGE)
+    c.rrect(M, y, CW, rows * cell_h, PANEL)
     for r in range(1, rows):
-        c.rect(M, y + r * cell_h - 1, CW, 2, WHITE)
+        c.rect(M, y + r * cell_h - 1, CW, 2, line)
     for k in range(1, cols):
-        c.rect(M + k * cw - 1, y, 2, rows * cell_h, WHITE)
+        c.rect(M + k * cw - 1, y, 2, rows * cell_h, line)
     for i, it in enumerate(items):
         draw(c, M + (i % cols) * cw, y + (i // cols) * cell_h, cw, it, i)
     return y + rows * cell_h
@@ -791,18 +843,18 @@ def catalogue():
     H = 48 + 3 * ch + 16
     c = Canvas(W, H, "All 12 shipped systems by domain")
     c.label(M, 26, "All shipped systems")
-    c.label(M + CW, 26, "12 total", fill=BLACK, anchor="end")
+    c.label(M + CW, 26, "12 total", fill=INK, anchor="end")
 
     def draw(cv, x, y, w, it, i):
         nm, dom, tech = it
-        cv.text(x + 20, y + 36, nm, 15, "s", BLACK, track=-0.01)
+        cv.text(x + 20, y + 36, nm, 15, "s", INK, track=-0.01)
         yy = y + 58
         for ln in wrap(dom.upper(), 10, "m", w - 40, 0.06):
             cv.text(x + 20, yy, ln, 10, "m", GREY, track=0.06)
             yy += 14
         yy += 6
         for ln in wrap(tech, 12, "r", w - 40):
-            cv.text(x + 20, yy, ln, 12, "r", BLACK)
+            cv.text(x + 20, yy, ln, 12, "r", INK)
             yy += 17
     grid_panel(c, 48, CATALOGUE, 4, ch, draw)
     return c.render()
@@ -810,29 +862,34 @@ def catalogue():
 
 # ------------------------------------------------------------------ journey
 def timeline():
-    ev = [("Oct 2022", "B.S. Data Science", "Begins"), ("Jul 2024", "AI/ML Fellow", "ACM UET × DevSinc"), ("Oct 2024", "ML Core Team", "UMT GoDoc"),
-          ("Dec 2024", "Junior ML Engineer", "Sunsprinkle · Remote"), ("Jun 2026", "B.S. completed", "Data Science"), ("Oct 2026", "Freelance AI/ML Engineer", "Remote · Present")]
+    ev = [("Aug 2024 \u2013 Sep 2025", "UMT Google Developers Club", "Leadership & community \u00b7 Lahore"),
+          ("Sep 2024 \u2013 Dec 2024", "Cosmi Code", "Machine Learning Intern \u00b7 Remote"),
+          ("Jan 2025 \u2013 Mar 2025", "UET \u00d7 Devsinc", "AI/ML Fellow \u00b7 Lahore"),
+          ("Nov 2025 \u2013 Oct 2026", "Sunsprinkle", "Junior Machine Learning Engineer \u00b7 Lahore"),
+          ("Oct 2026 \u2013 Present", "Freelance", "ML Engineer & Data Scientist \u00b7 Remote")]
     colw = CW / len(ev)
-    tl = max(len(wrap(t, 15, "s", colw - 18, -0.01)) for _, t, _ in ev)
-    H = 118 + tl * 20 + 44
-    c = Canvas(W, H, "Timeline from 2022 to freelance AI/ML engineer in 2026")
+    tl = max(len(wrap(t, 15, "s", colw - 20, -0.01)) for _, t, _ in ev)
+    sl = max(len(wrap(s_, 12, "r", colw - 20)) for _, _, s_ in ev)
+    H = 128 + tl * 20 + sl * 17 + 36
+    c = Canvas(W, H, "Career timeline: UMT Google Developers Club, Cosmi Code, UET x Devsinc, Sunsprinkle, Freelance")
     c.label(M, 26, "Timeline")
-    c.label(M + CW, 26, "2022 – 2026", anchor="end")
-    c.rect(M, 44, CW, 1, BLACK)
+    c.label(M + CW, 26, "2024 \u2013 present", anchor="end")
+    c.rect(M, 44, CW, 1, INK)
     ly = 92
     c.hair(M, M + CW, ly)
-    for i, (d, t, s) in enumerate(ev):
+    for i, (d, t, s_) in enumerate(ev):
         x = M + i * colw
         last = i == len(ev) - 1
-        c.label(x, 76, d, fill=BLACK, size=10.5)
-        c.rect(x, ly - 4, 10, 10, BLACK)
-        if last:
-            c.rect(x + 2.5, ly - 1.5, 5, 5, WHITE)
+        c.label(x, 76, d, fill=INK, size=9.5)
+        c.rect(x, ly - 4, 10, 10, SAND if last else INK)
         y = 128
-        for ln in wrap(t, 15, "s", colw - 18, -0.01):
-            c.text(x, y, ln, 15, "s", BLACK, track=-0.01)
+        for ln in wrap(t, 15, "s", colw - 20, -0.01):
+            c.text(x, y, ln, 15, "s", INK, track=-0.01)
             y += 20
-        c.text(x, y + 4, s, 12, "r", GREY)
+        y += 4
+        for ln in wrap(s_, 12, "r", colw - 20):
+            c.text(x, y, ln, 12, "r", GREY)
+            y += 17
     return c.render()
 
 
@@ -858,7 +915,7 @@ def principles():
         cv.text(x + 20, y + 34, f"{i+1:02d}", 10.5, "m", GREY, track=0.04)
         yy = y + 62
         for ln in wrap(t, 15, "s", w - 40, -0.01):
-            cv.text(x + 20, yy, ln, 15, "s", BLACK, track=-0.01)
+            cv.text(x + 20, yy, ln, 15, "s", INK, track=-0.01)
             yy += 20
         yy += 6
         for ln in wrap(body, 12.5, "r", w - 40):
@@ -873,21 +930,21 @@ def now():
     c = Canvas(W, H + 16, "Active development and currently exploring")
     lw = 488
     rx, rw = M + lw + G, CW - lw - G
-    c.rrect(M, 0, lw, H, BEIGE)
-    c.rrect(rx, 0, rw, H, BEIGE)
+    c.rrect(M, 0, lw, H, PANEL)
+    c.rrect(rx, 0, rw, H, PANEL)
     c.label(M + 24, 38, "Active development")
     c.hair(M + 24, M + lw - 24, 58)
     rows = [("Hospital Procurement Platform", "Forecasting and supplier scoring shipped", 5, 2, "V2 / V5"),
             ("AI Coding Assistant", "VS Code extension, FastAPI multi-LLM router", 10, 2, "Phase 2 / 10"), ("Lahori", "Lahore food discovery platform", 0, 0, "In development")]
     for r, (name, sub, cnt, done, lab) in enumerate(rows):
         y = 94 + r * 74
-        c.text(M + 24, y, name, 15, "s", BLACK, track=-0.01)
+        c.text(M + 24, y, name, 15, "s", INK, track=-0.01)
         c.text(M + 24, y + 22, sub, 12, "r", GREY)
         px, pw = M + lw - 24 - 140, 140
         if cnt:
             sg = (pw - (cnt - 1) * 3) / cnt
             for k in range(cnt):
-                c.rect(px + k * (sg + 3), y - 12, sg, 8, BLACK if k < done else WHITE)
+                c.rect(px + k * (sg + 3), y - 12, sg, 8, INK if k < done else PAGE)
             c.label(px + pw, y + 22, lab, anchor="end", size=10)
         else:
             c.label(px + pw, y + 22, lab, anchor="end", size=10)
@@ -900,7 +957,7 @@ def now():
         w = measure(s, 12, "r") + 22
         if x + w > rx + rw - 24:
             x, y = rx + 24, y + 34
-        c.tag(x, y, s, WHITE, BLACK, 12, 26, 11)
+        c.tag(x, y, s, PAGE, INK, 12, 26, 11)
         x += w + 6
     return c.render()
 
@@ -914,17 +971,19 @@ def engage():
     c = Canvas(W, H, "Work with me: full-time, contract builds, automation, prototype to production")
     c.label(M, 26, "Work with me")
     for (x, cw), (t, b), i in zip(cols, E, range(4)):
-        c.rect(x, 44, cw, 2, BLACK)
+        c.rect(x, 44, cw, 2, INK)
         c.label(x, 78, f"{i+1:02d}", size=10.5)
-        c.text(x, 106, t, 16, "s", BLACK, track=-0.01)
+        c.text(x, 106, t, 16, "s", INK, track=-0.01)
         c.para(x, 132, b, 13, "r", cw - 2, 20, GREY)
     return c.render()
 
 
 # ------------------------------------------------------------------ contact + footer
-CONTACTS = [("LinkedIn", "abdullah-imran", "https://www.linkedin.com/in/abdullah-imran-211658230"),
-            ("Email", "abdullahmran.001@gmail.com", "mailto:abdullahmran.001@gmail.com"),
-            ("GitHub", "abdullahmran-101", "https://github.com/abdullahmran-101")]
+CONTACTS = [("Primary email", "abdullahmran96@gmail.com", "mailto:abdullahmran96@gmail.com"),
+            ("Alternative email", "abdullahmran.001@gmail.com", "mailto:abdullahmran.001@gmail.com"),
+            ("Phone", "+92 3164009363", "tel:+923164009363")]
+LINKS = [("GitHub", "abdullahmran-101", "https://github.com/abdullahmran-101"),
+         ("LinkedIn", "abdullah-imran", "https://www.linkedin.com/in/abdullah-imran-211658230")]
 
 
 def contact(i):
@@ -933,22 +992,38 @@ def contact(i):
     H = 112
     c = Canvas(L["w"], H + 16, f"{lab}: {val}")
     x, cw = L["x"], L["cw"]
-    c.rrect(x, 0, cw, H, BEIGE)
-    c.label(x + 24, 40, lab, size=10.5)
-    c.text(x + 24, 84, val, 14, "s", BLACK, track=-0.01)
-    c.text(x + cw - 24, 40, "↗", 15, "r", BLACK, "end")
+    main = i == 0
+    c.rrect(x, 0, cw, H, SAND if main else PANEL)
+    c.label(x + 24, 40, lab, fill=PAGE if main else GREY, size=10.5)
+    c.text(x + 24, 84, val, 14, "s", PAGE if main else INK, track=-0.01)
+    c.text(x + cw - 24, 40, "\u2197", 15, "r", PAGE if main else INK, "end")
+    return c.render()
+
+
+def link(i):
+    L = cell_layout(2)[i]
+    lab, val, _ = LINKS[i]
+    H = 96
+    c = Canvas(L["w"], H + 16, f"{lab}: {val}")
+    x, cw = L["x"], L["cw"]
+    c.rrect(x, 0, cw, H, PANEL)
+    c.label(x + 24, 36, lab, size=10.5)
+    c.text(x + 24, 70, val, 14, "s", INK, track=-0.01)
+    c.text(x + cw - 24, 36, "\u2197", 15, "r", INK, "end")
     return c.render()
 
 
 def footer():
-    H = 192
+    H = 200
     c = Canvas(W, H + 40, "The model is the easy part. The system around it is the product.")
-    c.rrect(M, 0, CW, H, BLACK)
-    c.text(M + 40, 78, "The model is the easy part.", 28, "d", WHITE, track=-0.025)
-    c.text(M + 40, 116, "The system around it is the product.", 28, "d", BEIGE, track=-0.025)
-    c.hair(M + 40, M + CW - 40, H - 56, GREY)
-    c.label(M + 40, H - 26, "Abdullah Imran  \u00b7  Lahore", fill=BEIGE, size=10.5)
-    c.label(M + CW - 40, H - 26, "Build. Evaluate. Optimize. Deploy.", fill=BEIGE, anchor="end", size=10.5)
+    c.rrect(M, 0, CW, H, PANEL)
+    c.text(M + 40, 80, "The model is the easy part.", 28, "d", INK, track=-0.025)
+    c.text(M + 40, 118, "The system around it is the product.", 28, "d", GREY, track=-0.025)
+    c.hair(M + 40, M + CW - 40, H - 62, PAGE)
+    c.label(M + 40, H - 34, "abdullahmran96@gmail.com", fill=INK, size=10.5)
+    c.label(M + 40, H - 16, "+92 3164009363", fill=INK, size=10.5)
+    c.label(M + CW - 40, H - 34, "Abdullah Imran \u00b7 Lahore", fill=INK, anchor="end", size=10.5)
+    c.label(M + CW - 40, H - 16, "ML Engineer | Data Scientist", fill=INK, anchor="end", size=10.5)
     return c.render()
 
 
@@ -965,34 +1040,30 @@ def readme():
         repos.append("".join(f'<a href="{REPOS[r*2+k][4]}">{img(f"repo-{r*2+k+1}", REPOS[r*2+k][0], pct(L[k]["w"]))}</a>' for k in range(2)))
     L3 = cell_layout(3)
     contacts = "".join(f'<a href="{CONTACTS[i][2]}">{img(f"contact-{i+1}", CONTACTS[i][0] + " " + CONTACTS[i][1], pct(L3[i]["w"]))}</a>' for i in range(3))
+    L2 = cell_layout(2)
+    links = "".join(f'<a href="{LINKS[i][2]}">{img(f"link-{i+1}", LINKS[i][0] + " " + LINKS[i][1], pct(L2[i]["w"]))}</a>' for i in range(2))
     rows = [
-        f'<a href="https://github.com/{USER}">{img("hero", "Abdullah Imran. AI/ML engineer. Computer vision and intelligent product development. Lahore, Pakistan.")}</a>',
+        f'<a href="https://github.com/{USER}">{img("hero", "Abdullah Imran. ML Engineer and Data Scientist. Lahore, Pakistan.")}</a>',
         nav,
-        img("intro", "I design, build and deploy end-to-end intelligent systems."),
-        '<a name="overview"></a>' + img("head-overview", "01 Overview"),
-        img("practice", "Practice areas: engineer, builder, explorer"),
-        img("architecture", "System architecture"),
-        '<a name="stack"></a>' + img("head-stack", "02 Stack"),
+        '<a name="about"></a>' + img("head-about", "01 About"),
+        img("about", "About Abdullah Imran"),
+        img("practice", "Capabilities"),
+        '<a name="journey"></a>' + img("head-journey", "02 Journey"),
+        img("timeline", "Career timeline"),
+        img("now", "Active development and currently exploring"),
+        '<a name="systems"></a>' + img("head-systems", "03 Systems"),
+        repos[0], repos[1],
+        img("catalogue", "All shipped systems"),
+        '<a name="stack"></a>' + img("head-stack", "04 Stack"),
         img("skills", "Full skill matrix"),
-        '<a name="insights"></a>' + img("head-insights", "03 Insights"),
-        img("radar-domain", "Self-assessed proficiency radar and project portfolio by domain"),
-        img("stackmix", "Toolchain emphasis"),
         img("pipeline", "How I build: perceive, retrieve, reason, serve, ship"),
-        '<a name="activity"></a>' + img("head-activity", "04 Activity"),
+        '<a name="activity"></a>' + img("head-activity", "05 Activity"),
         img("kpis", "Activity summary"),
         img("heatmap", "Contribution heatmap, refreshed daily"),
         img("weekday-trend", "Most active weekday and weekly trend"),
         img("monthly", "Contributions by month"),
-        '<a name="systems"></a>' + img("head-systems", "05 Systems"),
-        repos[0], repos[1],
-        img("catalogue", "All shipped systems"),
-        '<a name="journey"></a>' + img("head-journey", "06 Journey"),
-        img("timeline", "Timeline from 2022 to 2026"),
-        img("principles", "Engineering principles"),
-        img("now", "Active development and currently exploring"),
-        img("engage", "Work with me"),
-        '<a name="contact"></a>' + img("head-contact", "07 Contact"),
-        contacts,
+        '<a name="contact"></a>' + img("head-contact", "06 Contact"),
+        contacts, links,
         img("footer", "The model is the easy part. The system around it is the product."),
     ]
     return ("<!-- Generated by scripts/render_readme_cards.py. Edit the script, not this file.\n"
@@ -1006,17 +1077,16 @@ def main():
         old.unlink()
     days, _ = fetch_days()
     F = {
-        "hero": hero(), "intro": intro(), "practice": practice(), "architecture": architecture(), "skills": skills(),
-        "radar-domain": radar_domain(), "stackmix": stackmix(), "pipeline": pipeline(),
+        "hero": hero(), "about": about(), "practice": practice(), "skills": skills(), "pipeline": pipeline(),
         "kpis": kpis(days), "heatmap": heatmap(days), "weekday-trend": weekday_trend(days), "monthly": monthly(days),
-        "catalogue": catalogue(), "timeline": timeline(), "principles": principles(), "now": now(), "engage": engage(), "footer": footer(),
-        "head-overview": section_header("01", "Overview", "Practice and architecture"),
-        "head-stack": section_header("02", "Stack", "Layers of the system"),
-        "head-insights": section_header("03", "Insights", "Proficiency and portfolio"),
-        "head-activity": section_header("04", "Activity", "Pulse and patterns"),
-        "head-systems": section_header("05", "Systems", "Selected repositories"),
-        "head-journey": section_header("06", "Journey", "Timeline, craft and current work"),
-        "head-contact": section_header("07", "Contact", "Open to remote"),
+        "catalogue": catalogue(), "timeline": timeline(), "now": now(),
+        "footer": footer(),
+        "head-about": section_header("01", "About", "Profile and capabilities"),
+        "head-journey": section_header("02", "Journey", "Career timeline and current work"),
+        "head-systems": section_header("03", "Systems", "Selected repositories"),
+        "head-stack": section_header("04", "Stack", "Skills and method"),
+        "head-activity": section_header("05", "Activity", "Pulse and patterns"),
+        "head-contact": section_header("06", "Contact", "Open to remote"),
     }
     for i in range(len(NAV)):
         F[f"nav-{i+1}"] = nav_cell(i)
@@ -1024,6 +1094,8 @@ def main():
         F[f"repo-{i+1}"] = repo(i)
     for i in range(len(CONTACTS)):
         F[f"contact-{i+1}"] = contact(i)
+    for i in range(len(LINKS)):
+        F[f"link-{i+1}"] = link(i)
     for name, content in F.items():
         minidom.parseString(content.encode("utf-8"))
         (OUT / f"{name}.svg").write_text(content, encoding="utf-8")
