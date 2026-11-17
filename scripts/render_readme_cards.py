@@ -41,7 +41,7 @@ PALETTE = {BG, PANEL, LINE, GRID, MUTED, TEXT, PURPLE, DEEP, LILAC}
 
 # ------------------------------------------------------------------ grid
 W, M, CW, G = 880, 40, 800, 16
-R_CARD, R_TAG = 4, 3
+R_CARD, R_TAG = 8, 3
 
 
 # ------------------------------------------------------------------ typography engine
@@ -195,6 +195,10 @@ class Canvas:
         d = f' stroke-dasharray="{dash}"' if dash else ""
         self.parts.append(f'<line x1="{n(x1)}" y1="{n(y1)}" x2="{n(x2)}" y2="{n(y2)}" stroke="{stroke}" stroke-width="{n(sw)}"{d}/>')
 
+    def circle(self, cx, cy, r, fill="none", stroke=None, sw=1):
+        st = f' stroke="{stroke}" stroke-width="{n(sw)}"' if stroke else ""
+        self.parts.append(f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="{fill}"{st}/>')
+
     def hair(self, x1, x2, y, stroke=LINE):
         self.line(x1, y + .5, x2, y + .5, stroke, 1)
 
@@ -249,7 +253,7 @@ class Canvas:
 
     def tag(self, x, y, txt, fill=LINE, ink=TEXT, size=12, h=26, px=11, wt="r"):
         w = measure(txt, size, wt) + 2 * px
-        self.rect(x, y, w, h, fill, R_TAG)
+        self.rrect(x, y, w, h, fill, r=h / 2)
         self.text(x + px, y + h / 2 + 0.3637 * size, txt, size, wt, ink)
         return w
 
@@ -259,6 +263,15 @@ class Canvas:
                 f'width="{n(self.w)}" height="{n(self.h)}" viewBox="0 0 {n(self.w)} {n(self.h)}" role="img" aria-label="{esc(self.title)}">\n'
                 f'<title>{esc(self.title)}</title>{defs}\n'
                 f'<rect width="{n(self.w)}" height="{n(self.h)}" fill="{PAGE}"/>\n' + "\n".join(self.parts) + "\n</svg>\n")
+
+
+def orbit(c, cx, cy, radii, node_angle, node_r=3, ink=LINE):
+    """Small concentric-ring glyph with one node on the outer ring."""
+    for r in radii:
+        c.circle(cx, cy, r, "none", ink, 1)
+    a = math.radians(node_angle)
+    c.circle(cx + radii[-1] * math.cos(a), cy + radii[-1] * math.sin(a), node_r, PURPLE)
+    c.circle(cx, cy, 2.5, PURPLE)
 
 
 def esc(s):
@@ -285,12 +298,12 @@ def pct(w):
 
 # ------------------------------------------------------------------ shared pieces
 def section_header(idx, name, caption):
-    c = Canvas(W, 132, f"{idx} {name}")
-    c.rect(M, 24, CW, 1, LINE)
-    c.rect(M, 22, 72, 4, PURPLE)
-    c.label(M, 56, idx)
-    c.label(W - M, 56, caption, anchor="end")
-    c.text(M, 106, name, 34, "d", INK, track=-0.025)
+    c = Canvas(W, 148, f"{idx} {name}")
+    c.label(M, 44, idx)
+    c.hair(M + 34, M + CW, 40)
+    c.rect(M + 34, 39, 36, 2, PURPLE)
+    c.text(M, 108, name, 44, "d", TEXT, track=-0.03)
+    c.text(M + CW, 108, caption, 13, "r", MUTED, "end")
     return c.render()
 
 
@@ -301,36 +314,49 @@ def card_columns(count):
 
 # ------------------------------------------------------------------ hero
 def hero():
-    c = Canvas(W, 456, "Abdullah Imran. ML Engineer and Data Scientist. Lahore, Pakistan.")
-    c.rect(M, 24, CW, 1, LINE)
-    c.rect(M, 22, 72, 4, PURPLE)
+    H = 588
+    c = Canvas(W, H, "Abdullah Imran. ML Engineer and Data Scientist. Lahore, Pakistan.")
     c.label(M, 56, "~/abdullah-imran / profile")
-    sw = c.label(W - M, 56, "Open to roles and contracts", fill=INK, anchor="end")
-    c.rect(W - M - sw - 18, 49, 8, 8, PURPLE)
-    c.text(M, 170, "Abdullah Imran", 60, "d", INK, track=-0.035)
-    c.text(M, 220, "ML Engineer | Data Scientist", 22, "m", INK, track=-0.01)
-    c.para(M, 254, "I build intelligent systems, machine learning solutions, AI-powered applications and data-driven products.", 15, "r", 470, 23, GREY)
-    px, py, pw, rows = 568, 88, 272, 3
-    c.rrect(px, py, pw, rows * 64 + 12, PANEL)
-    facts = [("Location", "Lahore, Pakistan \u00b7 Remote"), ("Focus", "ML \u00b7 GenAI \u00b7 Computer vision"), ("Status", "Open to roles and contracts")]
-    for i, (k, v) in enumerate(facts):
-        y = py + i * 64
-        c.label(px + 20, y + 28, k, size=10.5)
-        c.text(px + 20, y + 49, v, 14, "m", INK)
-        if i < rows - 1:
-            c.hair(px + 20, px + pw - 20, y + 64 - 1)
-    sy = 328
+    sw = c.label(W - M, 56, "Open to roles and contracts", fill=TEXT, anchor="end")
+    c.circle(W - M - sw - 16, 52.5, 4, PURPLE)
+    # orbital field
+    cx, cy = 650, 262
+    for r in (40, 80, 120, 160):
+        c.circle(cx, cy, r, "none", LINE, 1)
+    c.circle(cx, cy, 196, "none", GRID, 1)
+    for k in range(72):
+        a = math.radians(k * 5)
+        r0, r1 = (196, 206) if k % 6 == 0 else (196, 201)
+        c.line(cx + r0 * math.cos(a), cy + r0 * math.sin(a), cx + r1 * math.cos(a), cy + r1 * math.sin(a), GRID if k % 6 == 0 else LINE, 1)
+    nodes = [(80, 40, 4, PURPLE), (120, 205, 3, TEXT), (160, 300, 5, LILAC), (196, 118, 4, PURPLE), (160, 20, 3, TEXT)]
+    pts = [(cx + r * math.cos(math.radians(a)), cy + r * math.sin(math.radians(a))) for r, a, _, _ in nodes]
+    for (x, y) in pts:
+        c.line(cx, cy, x, y, LINE, 1)
+    for (x, y), (_, _, nr, col) in zip(pts, nodes):
+        c.circle(x, y, nr + 5, "none", LINE, 1)
+        c.circle(x, y, nr, col)
+    c.circle(cx, cy, 16, DEEP)
+    c.circle(cx, cy, 5, LILAC)
+    # copy
+    c.label(M, 128, "Lahore, Pakistan \u00b7 Remote")
+    c.text(M, 206, "Abdullah", 76, "d", TEXT, track=-0.04)
+    c.text(M, 290, "Imran", 76, "d", MUTED, track=-0.04)
+    c.text(M, 342, "ML Engineer | Data Scientist", 22, "m", TEXT, track=-0.01)
+    c.para(M, 380, "I build intelligent systems, machine learning solutions, AI-powered applications and data-driven products.", 15, "r", 400, 24, MUTED)
     tx = M
-    for t_ in ["Python", "PyTorch", "FastAPI", "RAG", "LangGraph", "Docker", "pgvector"]:
-        tx += c.tag(tx, 290, t_, PANEL, TEXT, 12, 26, 11) + 6
-    c.rrect(M, sy, CW, 96, DEEP)
+    for t_ in ["Python", "PyTorch", "FastAPI", "RAG", "LangGraph"]:
+        tx += c.tag(tx, 442, t_, PANEL, TEXT, 12, 28, 13) + 6
+    # stats
+    sy = 492
+    c.hair(M, M + CW, sy)
     stats = [("13", "Systems shipped"), ("6", "Certifications"), ("5", "Roles & communities"), ("90%", "Model accuracy")]
     for i, (big, lab) in enumerate(stats):
         x = M + i * 200
-        c.text(x + 24, sy + 50, big, 36, "d", TEXT, track=-0.03)
-        c.label(x + 24, sy + 74, lab, fill=TEXT, size=10.5)
+        c.text(x + (0 if i == 0 else 24), sy + 52, big, 36, "d", TEXT, track=-0.03)
+        c.label(x + (0 if i == 0 else 24), sy + 76, lab, fill=MUTED, size=10.5)
         if i:
-            c.vhair(x, sy + 20, sy + 76, PURPLE)
+            c.vhair(x, sy + 18, sy + 82)
+    c.rect(M, sy - 1, 72, 3, PURPLE)
     return c.render()
 
 
@@ -697,9 +723,9 @@ def heatmap(days):
             x, y = x0 + ci * pitch, top + ri * pitch
             if lvl:
                 s = cell * (0, .55, .7, .85, 1)[lvl]
-                c.rect(x + (cell - s) / 2, y + (cell - s) / 2, s, s, (0, GRID, DEEP, PURPLE, LILAC)[lvl])
+                c.circle(x + cell / 2, y + cell / 2, s / 2, (0, GRID, DEEP, PURPLE, LILAC)[lvl])
             else:
-                c.rect(x + cell / 2 - 1, y + cell / 2 - 1, 2, 2, LINE)
+                c.circle(x + cell / 2, y + cell / 2, 1.2, LINE)
     for ri, nm in ((0, "Mon"), (2, "Wed"), (4, "Fri")):
         c.text(M, top + ri * pitch + cell / 2 + 4, nm, 11, "r", GREY)
     ly = top + 7 * pitch + 28
@@ -710,9 +736,9 @@ def heatmap(days):
         x = lx + k * (cell + 5)
         if k:
             s = cell * (0, .55, .7, .85, 1)[k]
-            c.rect(x + (cell - s) / 2, ly + (cell - s) / 2, s, s, (0, GRID, DEEP, PURPLE, LILAC)[k])
+            c.circle(x + cell / 2, ly + cell / 2, s / 2, (0, GRID, DEEP, PURPLE, LILAC)[k])
         else:
-            c.rect(x + cell / 2 - 1, ly + cell / 2 - 1, 2, 2, LINE)
+            c.circle(x + cell / 2, ly + cell / 2, 1.2, LINE)
     c.text(lx + 5 * (cell + 5) + 3, ly + cell / 2 + 4, "More", 11, "r", GREY)
     return c.render()
 
@@ -832,7 +858,7 @@ def repo(i):
     c.rrect(x, 0, cw, H, bg)
     c.rect(x + 28, 2, 56, 3, PURPLE)
     c.label(x + 28, 40, dom, fill=PURPLE, size=10.5)
-    c.label(x + cw - 28, 40, f"{i+1:02d}", fill=MUTED, anchor="end", size=10.5)
+    orbit(c, x + cw - 56, 52, (10, 18, 26), 25 + i * 63)
     c.text(x + 28, 92, name, 28, "d", TEXT, track=-0.025)
     k = c.para(x + 28, 126, desc, 14, "r", cw - 56, 22, MUTED)
     ty = 126 + (k - 1) * 22 + 24
@@ -913,7 +939,8 @@ def timeline():
         x = M + i * colw
         last = i == len(ev) - 1
         c.label(x, 76, d, fill=INK, size=9.5)
-        c.rect(x, ly - 5, 12, 12, LILAC if last else PURPLE)
+        c.circle(x + 6, ly + .5, 9, "none", LINE, 1)
+        c.circle(x + 6, ly + .5, 5, LILAC if last else PURPLE)
         y = 128
         for ln in wrap(t, 15, "s", colw - 20, -0.01):
             c.text(x, y, ln, 15, "s", INK, track=-0.01)
@@ -1049,6 +1076,7 @@ def footer():
     c = Canvas(W, H + 40, "The model is the easy part. The system around it is the product.")
     c.rrect(M, 0, CW, H, PANEL)
     c.rect(M + 40, 2, 72, 3, PURPLE)
+    orbit(c, M + CW - 110, 76, (16, 32, 48), 200, 4)
     c.text(M + 40, 84, "The model is the easy part.", 28, "d", CREAM, track=-0.025)
     c.text(M + 40, 122, "The system around it is the product.", 28, "d", PURPLE, track=-0.025)
     c.hair(M + 40, M + CW - 40, H - 62, LINE)

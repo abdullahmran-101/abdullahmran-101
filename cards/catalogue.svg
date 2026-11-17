@@ -3,8 +3,8 @@
 <rect width="880" height="528" fill="#0B0B0D"/>
 <g transform="translate(40 26) scale(0.00537 -0.00537)" fill="#8B5CF6"><use xlink:href="#m0" x="0"/><use xlink:href="#m1" x="1615.84"/><use xlink:href="#m1" x="2937.68"/><use xlink:href="#m3" x="4969.36"/><use xlink:href="#m4" x="6456.2"/><use xlink:href="#m5" x="8145.04"/><use xlink:href="#m6" x="8866.88"/><use xlink:href="#m6" x="10344.72"/><use xlink:href="#m7" x="11822.56"/><use xlink:href="#m8" x="13221.4"/><use xlink:href="#m3" x="15573.08"/><use xlink:href="#m9" x="17059.92"/><use xlink:href="#m3" x="18649.76"/><use xlink:href="#m10" x="20136.6"/><use xlink:href="#m7" x="21637.44"/><use xlink:href="#m11" x="23036.28"/><use xlink:href="#m3" x="25069.12"/></g>
 <g transform="translate(784.25 26) scale(0.00537 -0.00537)" fill="#ECECF1"><use xlink:href="#m12" x="0"/><use xlink:href="#m13" x="1013.84"/><use xlink:href="#m10" x="3171.52"/><use xlink:href="#m14" x="4610.36"/><use xlink:href="#m10" x="6282.2"/><use xlink:href="#m0" x="7606.04"/><use xlink:href="#m1" x="9221.88"/></g>
-<path d="M44,48 H836 A4,4 0 0 1 840,52 V508 A4,4 0 0 1 836,512 H44 A4,4 0 0 1 40,508 V52 A4,4 0 0 1 44,48 Z" fill="#2C2C33"/>
-<path d="M44.5,49.5 H835.5 A3,3 0 0 1 838.5,52.5 V507.5 A3,3 0 0 1 835.5,510.5 H44.5 A3,3 0 0 1 41.5,507.5 V52.5 A3,3 0 0 1 44.5,49.5 Z" fill="#16161A"/>
+<path d="M48,48 H832 A8,8 0 0 1 840,56 V504 A8,8 0 0 1 832,512 H48 A8,8 0 0 1 40,504 V56 A8,8 0 0 1 48,48 Z" fill="#2C2C33"/>
+<path d="M48.5,49.5 H831.5 A7,7 0 0 1 838.5,56.5 V503.5 A7,7 0 0 1 831.5,510.5 H48.5 A7,7 0 0 1 41.5,503.5 V56.5 A7,7 0 0 1 48.5,49.5 Z" fill="#16161A"/>
 <rect x="40" y="163" width="800" height="2" fill="#2C2C33"/>
 <rect x="40" y="279" width="800" height="2" fill="#2C2C33"/>
 <rect x="40" y="395" width="800" height="2" fill="#2C2C33"/>
