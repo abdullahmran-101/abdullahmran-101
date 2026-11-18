@@ -598,36 +598,31 @@ def timeline():
 
 
 def now():
-    H = 300
-    c = Canvas(W, H + 16, "Active development and currently exploring")
+    H = 264
+    c = Canvas(W, H + 16, "Active development: SupplyChainIQ. Also currently exploring.")
     lw = 488
     rx, rw = M + lw + G, CW - lw - G
     c.rrect(M, 0, lw, H, PANEL)
     c.rrect(rx, 0, rw, H, PANEL)
     c.mono(M + 24, 38, "// active development", 11, PURPLE, bold=True)
     c.hair(M + 24, M + lw - 24, 58)
-    rows = [("Hospital Procurement Platform", "Forecasting and supplier scoring shipped", 5, 2, "V2 / V5"),
-            ("AI Coding Assistant", "VS Code extension, FastAPI multi-LLM router", 10, 2, "Phase 2 / 10"), ("Lahori", "Lahore food discovery platform", 0, 0, "In development")]
-    for r, (name, sub, cnt, done, lab) in enumerate(rows):
-        y = 94 + r * 74
-        c.text(M + 24, y, name, 15, "s", WHITE, track=-0.01)
-        c.text(M + 24, y + 22, sub, 12, "r", MUTED)
-        px, pw = M + lw - 24 - 140, 140
-        if cnt:
-            sg = (pw - (cnt - 1) * 3) / cnt
-            for k in range(cnt):
-                c.rect(px + k * (sg + 3), y - 12, sg, 8, WHITE if k < done else GRID)
-        c.mlabel(px + pw, y + 22, lab, PURPLE, "end", 10, True)
-        if r < 2:
-            c.hair(M + 24, M + lw - 24, y + 40)
+    c.text(M + 24, 100, "SupplyChainIQ", 26, "d", WHITE, track=-0.025)
+    k = c.para(M + 24, 128, "Agentic GraphRAG platform for supply chain risk and dependency intelligence.", 13.5, "r", lw - 48, 21, MUTED)
+    tx = M + 24
+    for t_ in ["Neo4j", "LangGraph", "FastAPI", "pgvector"]:
+        tx += c.chip(tx, 128 + (k - 1) * 21 + 20, t_, 11, 24, 10, "mono", TEXT, LINE2) + 6
+    c.hair(M + 24, M + lw - 24, H - 56)
+    c.rect(M + 24, H - 33, 7, 7, WHITE)
+    c.mlabel(M + 40, H - 26, "In development", WHITE, size=10, bold=True)
+    c.mlabel(M + lw - 24, H - 26, "Started Nov 2026", PURPLE, "end", 10, True)
     c.mono(rx + 24, 38, "// exploring", 11, PURPLE, bold=True)
     c.hair(rx + 24, rx + rw - 24, 58)
     x, y = rx + 24, 80
-    for s in ["Agentic AI", "Multimodal fusion", "pgvector", "RBAC & multi-tenancy", "Next.js dashboards", "Production MLOps"]:
-        w = measure(s, 12, "r") + 22
+    for s_ in ["Agentic AI", "Multimodal fusion", "pgvector", "RBAC & multi-tenancy", "Next.js dashboards", "Production MLOps"]:
+        w = measure(s_, 12, "r") + 22
         if x + w > rx + rw - 24:
             x, y = rx + 24, y + 34
-        c.chip(x, y, s, 12, 26, 11)
+        c.chip(x, y, s_, 12, 26, 11)
         x += w + 6
     return c.render()
 
@@ -710,7 +705,7 @@ def catalogue():
     c.rect(bx + 1, by + 1, 3 * CW / 4 - 2, ch - 2, WHITE)
     c.rect(bx + 24, by + 28, 7, 7, BG)
     c.mlabel(bx + 40, by + 36, "In development", BG, size=10.5, bold=True)
-    c.text(bx + 24, by + 72, "Hospital Procurement Platform \u00b7 AI Coding Assistant \u00b7 Lahori", 15, "s", BG, track=-0.01)
+    c.text(bx + 24, by + 72, "SupplyChainIQ \u00b7 Agentic GraphRAG for supply chain risk", 15, "s", BG, track=-0.01)
     return c.render()
 
 
